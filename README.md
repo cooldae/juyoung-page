@@ -12,6 +12,7 @@ Unity 기반 AR·VR, 전시 인터랙션, IoT 디바이스 연동 프로젝트 3
 1. `data/projects.js` 를 열어 블록 하나를 복사해 붙여넣고 내용을 바꿉니다.
 2. 사진이 있으면 `assets/projects/<slug>/` 폴더에 넣고 파일명을 `images` 에 적습니다.
 3. 유튜브 영상이 있으면 주소를 그대로 `youtube` 에 붙여넣습니다.
+   여러 개면 배열로 적으면 되고, 상세 페이지에서 좌우 화살표로 넘어갑니다.
 4. 저장하고 push 하면 끝입니다.
 
 ```js
@@ -25,7 +26,7 @@ Unity 기반 AR·VR, 전시 인터랙션, IoT 디바이스 연동 프로젝트 3
   stack: ["Unity", "C#"],
   work: ["담당한 일 1", "담당한 일 2"],
   images: ["01.jpg"],
-  youtube: "https://youtu.be/XXXXXXXXXXX",
+  youtube: "https://youtu.be/XXXXXXXXXXX",     // 여러 개면 [ "...", "..." ]
 }
 ```
 

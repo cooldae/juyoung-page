@@ -26,6 +26,18 @@
                  예) images: ["01.jpg", "02.jpg"]
      youtube   : 유튜브 주소를 그대로 붙여넣으면 됩니다.
                  youtu.be / watch?v= / shorts 전부 인식합니다. 없으면 "" 로.
+
+                 영상이 여러 개면 배열로 적으세요. 좌우 화살표로 넘길 수 있습니다.
+                   youtube: [
+                     "https://youtu.be/AAAAAAAAAAA",
+                     "https://youtu.be/BBBBBBBBBBB",
+                   ],
+
+                 영상마다 이름을 붙이고 싶으면 이렇게도 됩니다.
+                   youtube: [
+                     { url: "https://youtu.be/AAAAAAAAAAA", label: "메인관 Timespace" },
+                     { url: "https://youtu.be/BBBBBBBBBBB", label: "꽃 관" },
+                   ],
    ============================================================ */
 
 window.PROJECTS = [
@@ -340,7 +352,10 @@ window.PROJECTS = [
       "전체 인터랙션 콘텐츠 단독 개발 및 태국 현장 납품 수행. 장시간 전시 운영을 고려한 안정화 구현으로 납품 후 약 1년간 안정 운영 중.",
     note: "출장 — 태국 파타야 현장 설치·테스트·납품 총 20일 (2025.05.21 ~ 05.29 / 2025.07.01 ~ 07.11)",
     images: ["01.jpg", "02.jpg"],
-    youtube: "https://www.youtube.com/watch?v=1SzYk_Ki5vk",
+    youtube: [
+      "https://www.youtube.com/watch?v=1SzYk_Ki5vk",
+      "https://youtu.be/G__iZo3F4ts",
+    ],
   },
 
   {

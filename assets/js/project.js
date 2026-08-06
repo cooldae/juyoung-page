@@ -46,15 +46,40 @@
 
   var parts = [];
 
-  /* 영상 */
-  var videoId = App.youtubeId(project.youtube);
-  if (videoId) {
+  /* 영상 — 주소 하나도, 배열도 받습니다 */
+  function normalizeVideos(input) {
+    var raw = Array.isArray(input) ? input : (input ? [input] : []);
+    var out = [];
+    raw.forEach(function (item) {
+      var url = typeof item === "string" ? item : (item && item.url);
+      var id = App.youtubeId(url);
+      if (id) out.push({ id: id, label: (item && item.label) || "" });
+    });
+    return out;
+  }
+
+  var videos = normalizeVideos(project.youtube);
+  var hasVideoLabels = videos.some(function (v) { return !!v.label; });
+
+  if (videos.length) {
+    var nav = videos.length > 1
+      ? '<div class="video-nav">' +
+          '<button type="button" class="vid-btn vid-prev" aria-label="이전 영상">&#8249;</button>' +
+          '<span class="vid-count" id="vid-count" aria-live="polite">1 / ' + videos.length + "</span>" +
+          '<button type="button" class="vid-btn vid-next" aria-label="다음 영상">&#8250;</button>' +
+        "</div>"
+      : "";
+
     parts.push(
       block("Video",
-        '<div class="video-frame">' +
-          '<iframe src="https://www.youtube-nocookie.com/embed/' + esc(videoId) + '"' +
-          ' title="' + esc(project.title) + ' 영상" loading="lazy" allowfullscreen' +
-          ' allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>' +
+        '<div class="video-block" id="video-block">' +
+          '<div class="video-frame">' +
+            '<iframe id="video-iframe" src="https://www.youtube-nocookie.com/embed/' + esc(videos[0].id) + '"' +
+            ' title="' + esc(project.title) + ' 영상" loading="lazy" allowfullscreen' +
+            ' allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>' +
+          "</div>" +
+          (hasVideoLabels ? '<p class="vid-label" id="vid-label">' + esc(videos[0].label) + "</p>" : "") +
+          nav +
         "</div>")
     );
   }
@@ -227,6 +252,40 @@
     if (sources.length < 2) {
       box.querySelectorAll(".lb-nav").forEach(function (b) { b.style.display = "none"; });
     }
+  })();
+
+  /* ---------------- 영상 좌우 넘기기 ---------------- */
+
+  (function initVideoNav() {
+    if (videos.length < 2) return;
+
+    var wrap  = document.getElementById("video-block");
+    var frame = document.getElementById("video-iframe");
+    var count = document.getElementById("vid-count");
+    var label = document.getElementById("vid-label");
+    if (!wrap || !frame) return;
+
+    var current = 0;
+
+    function show(i) {
+      current = (i + videos.length) % videos.length;
+      // src 를 바꾸면 이전 영상 재생이 멈춥니다
+      frame.src = "https://www.youtube-nocookie.com/embed/" + videos[current].id;
+      if (count) count.textContent = current + 1 + " / " + videos.length;
+      if (label) label.textContent = videos[current].label;
+    }
+
+    wrap.addEventListener("click", function (e) {
+      if (e.target.closest(".vid-prev")) show(current - 1);
+      else if (e.target.closest(".vid-next")) show(current + 1);
+    });
+
+    // 좌우 화살표 키 — 버튼에 포커스가 있을 때만 (라이트박스와 겹치지 않게)
+    wrap.addEventListener("keydown", function (e) {
+      if (!e.target.closest(".vid-btn")) return;
+      if (e.key === "ArrowLeft") { e.preventDefault(); show(current - 1); }
+      else if (e.key === "ArrowRight") { e.preventDefault(); show(current + 1); }
+    });
   })();
 
   App.renderFooter();
