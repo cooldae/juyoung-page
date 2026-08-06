@@ -63,11 +63,26 @@
       })
       .join("");
 
+    var education = (P.education || [])
+      .map(function (e) {
+        return (
+          '<div class="career-item">' +
+            '<span class="co">' + esc(e.school) + "</span>" +
+            '<span class="pd">' + esc(e.period) + "</span>" +
+            (e.detail ? '<span class="rl">' + esc(e.detail) + "</span>" : "") +
+          "</div>"
+        );
+      })
+      .join("");
+
     // Skills 목록은 첫 화면(hero)에 표시되므로 여기서는 생략합니다.
     host.innerHTML =
       '<div class="about-grid">' +
         '<div class="card reveal"><h3>Career</h3><div class="career">' + careers + "</div></div>" +
         '<div class="card reveal"><h3>Strengths</h3><ul class="bullets">' + strengths + "</ul></div>" +
+        (education
+          ? '<div class="card reveal"><h3>Education</h3><div class="career">' + education + "</div></div>"
+          : "") +
       "</div>";
   }
 

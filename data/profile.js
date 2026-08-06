@@ -51,6 +51,20 @@ window.PROFILE = {
     },
   ],
 
+  // 학력 (최신순). 비워두면 About 에서 카드 자체가 사라집니다.
+  education: [
+    {
+      school: "상지대학교 컴퓨터공학과",
+      period: "2016.02 ~ 2022.03",
+      detail: "학사",
+    },
+    {
+      school: "지능형 빅데이터 분석 실무자 양성 과정",
+      period: "2021.09 ~ 2021.11",
+      detail: "수료",
+    },
+  ],
+
   // 하단에 노출할 링크 (필요 없으면 빈 배열 [] 로)
   links: [
     { label: "GitHub", url: "https://github.com/cooldae" },
