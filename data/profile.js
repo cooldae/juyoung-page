@@ -7,14 +7,12 @@ window.PROFILE = {
   nameEn: "KIM JUYOUNG",
   nameKo: "김주영",
 
-  // 첫 화면 큰 문장 (자유롭게 바꾸세요)
-  tagline: "센서와 화면 사이를 잇는\n인터랙션을 만듭니다.",
+  // 첫 화면 큰 문장 (\n 을 넣으면 줄바꿈됩니다)
+  tagline: "김주영의 포트폴리오",
 
-  // 그 아래 소개 문단
-  intro:
-    "Unity를 중심으로 AR·VR, 전시 인터랙션, IoT 디바이스 연동까지 다뤄 왔습니다. " +
-    "LiDAR·Depth Camera·RFID 같은 센서에서 들어온 데이터를 대형 화면 위의 경험으로 바꾸는 일을 주로 합니다. " +
-    "기획부터 개발, 현장 설치와 납품까지 직접 맡습니다.",
+  // 큰 문장 아래 소개 문단. 비워두면 아무것도 안 나옵니다.
+  // 지금은 문단 대신 아래 skills 목록이 그 자리에 표시됩니다.
+  intro: "",
 
   email: "juyoung.kim.dev@gmail.com",
 
@@ -31,6 +29,7 @@ window.PROFILE = {
     "업무 커뮤니케이션 스킬 (Slack · Notion · Figma 사용에 능숙)",
   ],
 
+  // 첫 화면에 태그 형태로 표시됩니다. 순서대로 나옵니다.
   skills: [
     "Unity", "C#", "Unreal Engine", "C++", "Python", "Kotlin", "Java",
     "Vue", "Flask", "django", "MySQL", "Bootstrap 5", "HTML & CSS & JS",

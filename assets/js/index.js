@@ -29,11 +29,16 @@
       contacts.push('<span class="pill">' + esc(lang) + "</span>");
     });
 
+    var skillChips = (P.skills || [])
+      .map(function (s) { return '<span class="chip">' + esc(s) + "</span>"; })
+      .join("");
+
     host.innerHTML =
       '<div class="wrap">' +
-        '<p class="eyebrow reveal">' + esc(P.nameEn || "") + " · " + esc(P.nameKo || "") + "</p>" +
+        '<p class="eyebrow reveal">' + esc(P.nameEn || "") + "</p>" +
         '<h1 class="reveal">' + esc(P.tagline || "") + "</h1>" +
-        '<p class="intro reveal">' + esc(P.intro || "") + "</p>" +
+        (P.intro ? '<p class="intro reveal">' + esc(P.intro) + "</p>" : "") +
+        (skillChips ? '<div class="hero-skills chips reveal">' + skillChips + "</div>" : "") +
         '<div class="hero-meta reveal">' + contacts.join("") + "</div>" +
       "</div>";
   }
@@ -58,16 +63,12 @@
       })
       .join("");
 
-    var skills = (P.skills || [])
-      .map(function (s) { return '<span class="chip chip-plain">' + esc(s) + "</span>"; })
-      .join("");
-
+    // Skills 목록은 첫 화면(hero)에 표시되므로 여기서는 생략합니다.
     host.innerHTML =
       '<div class="about-grid">' +
         '<div class="card reveal"><h3>Career</h3><div class="career">' + careers + "</div></div>" +
         '<div class="card reveal"><h3>Strengths</h3><ul class="bullets">' + strengths + "</ul></div>" +
-      "</div>" +
-      '<div class="card reveal" style="margin-top:clamp(20px,3vw,32px)"><h3>Skills</h3><div class="chips">' + skills + "</div></div>";
+      "</div>";
   }
 
   /* ---------------- 프로젝트 목록 ---------------- */

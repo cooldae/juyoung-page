@@ -189,8 +189,21 @@ a:hover { color: var(--accent); }
   font-size: clamp(0.95rem, 1.6vw, 1.05rem);
 }
 
+/* 첫 화면 기술 목록 */
+.hero-skills {
+  margin-top: 2.2rem;
+  max-width: 62ch;
+  gap: 8px;
+}
+.hero-skills .chip {
+  font-size: 0.82rem;
+  padding: 5px 13px;
+}
+
 .hero-meta {
-  margin-top: 2.6rem;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--line-soft);
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
