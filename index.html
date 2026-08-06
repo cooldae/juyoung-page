@@ -3,156 +3,82 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>JUYOUNG KIM</title>
-<meta name="description" content="김주영 소개 페이지" />
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>◆</text></svg>" />
-<style>
-  :root {
-    --bg: #0b0b0d;
-    --fg: #f2f2f0;
-    --muted: #6f6f76;
-    --line: #1e1e22;
-    --accent: #d8ff3e;
-  }
+<title>KIM JUYOUNG — 김주영</title>
+<meta name="description" content="Unity 기반 AR·VR, 전시 인터랙션, IoT 디바이스 연동 개발자 김주영의 소개 페이지입니다." />
+<meta name="author" content="Kim Juyoung" />
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
+<meta property="og:type" content="website" />
+<meta property="og:title" content="KIM JUYOUNG — 김주영" />
+<meta property="og:description" content="Unity 기반 AR·VR, 전시 인터랙션, IoT 디바이스 연동 개발자 김주영의 소개 페이지입니다." />
+<meta property="og:url" content="https://cooldae.github.io/juyoung-page/" />
+<meta name="twitter:card" content="summary" />
 
-  html { -webkit-text-size-adjust: 100%; }
+<meta name="theme-color" content="#f7f2e8" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#1b1713" media="(prefers-color-scheme: dark)" />
 
-  body {
-    min-height: 100svh;
-    display: flex;
-    flex-direction: column;
-    background: var(--bg);
-    color: var(--fg);
-    font-family: "Pretendard", -apple-system, "Segoe UI", "Malgun Gothic", sans-serif;
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
-  }
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%23a97b53'/><text x='16' y='22' font-size='17' font-family='sans-serif' font-weight='600' fill='%23fffdf8' text-anchor='middle'>J</text></svg>" />
 
-  main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 8vh 7vw;
-    max-width: 1100px;
-    width: 100%;
-    margin: 0 auto;
-  }
-
-  .tag {
-    font-size: 0.75rem;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-bottom: 2.2rem;
-  }
-
-  .tag::before {
-    content: "";
-    display: inline-block;
-    width: 6px;
-    height: 6px;
-    background: var(--accent);
-    border-radius: 50%;
-    margin-right: 0.7em;
-    vertical-align: 0.15em;
-  }
-
-  h1 {
-    font-size: clamp(2.8rem, 11vw, 7.5rem);
-    line-height: 0.95;
-    letter-spacing: -0.03em;
-    font-weight: 600;
-  }
-
-  h1 span {
-    display: block;
-    color: var(--muted);
-  }
-
-  .lead {
-    margin-top: 2.5rem;
-    max-width: 42ch;
-    font-size: clamp(1rem, 2.4vw, 1.2rem);
-    color: #b4b4b8;
-  }
-
-  .rule {
-    margin: 3.5rem 0 2rem;
-    height: 1px;
-    background: var(--line);
-  }
-
-  .meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.2rem 2.8rem;
-    font-size: 0.85rem;
-    color: var(--muted);
-  }
-
-  .meta div span {
-    display: block;
-    color: var(--fg);
-    margin-top: 0.2rem;
-  }
-
-  footer {
-    padding: 1.6rem 7vw;
-    border-top: 1px solid var(--line);
-    font-size: 0.72rem;
-    letter-spacing: 0.06em;
-    color: #3f3f45;
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    main > * {
-      animation: rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) backwards;
-    }
-    .tag  { animation-delay: 0.05s; }
-    h1    { animation-delay: 0.12s; }
-    .lead { animation-delay: 0.24s; }
-    .rule { animation-delay: 0.32s; }
-    .meta { animation-delay: 0.38s; }
-  }
-
-  @keyframes rise {
-    from { opacity: 0; transform: translateY(14px); }
-    to   { opacity: 1; transform: none; }
-  }
-</style>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" />
+<link rel="stylesheet" href="assets/css/style.css" />
 </head>
 <body>
 
-<main>
-  <p class="tag">Under construction</p>
+<a class="skip" href="#main">본문으로 건너뛰기</a>
 
-  <h1>JUYOUNG<span>KIM</span></h1>
-
-  <p class="lead">
-    소개 페이지를 준비하고 있습니다.
-    지금 보이는 화면은 배포가 정상적으로 동작하는지 확인하기 위한 임시 페이지입니다.
-  </p>
-
-  <div class="rule"></div>
-
-  <div class="meta">
-    <div>Status<span>Deploy check</span></div>
-    <div>Host<span>GitHub Pages</span></div>
-    <div>Contact<span>admin@zipshowkorea.com</span></div>
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="index.html">KIM JUYOUNG</a>
+    <nav class="site-nav" aria-label="주요 메뉴">
+      <a href="#about" data-optional>About</a>
+      <a href="#projects">Projects</a>
+      <a href="#footer">Contact</a>
+    </nav>
   </div>
+</header>
+
+<main id="main">
+
+  <section class="hero" id="hero"></section>
+
+  <section class="section" id="about">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <h2>About</h2>
+      </div>
+      <div id="about-body"></div>
+    </div>
+  </section>
+
+  <section class="section" id="projects">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <h2>Projects</h2>
+        <span class="count" id="project-count"></span>
+      </div>
+
+      <div class="filters reveal">
+        <div class="filter-group" id="filter-group"></div>
+        <div class="search">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" /><path d="M20 20l-3.5-3.5" />
+          </svg>
+          <input type="search" id="project-search" placeholder="프로젝트 · 기술 검색"
+                 aria-label="프로젝트 검색" autocomplete="off" />
+        </div>
+      </div>
+
+      <div class="project-grid" id="project-grid"></div>
+    </div>
+  </section>
+
 </main>
 
-<footer>
-  <span>&copy; 2026 Juyoung Kim</span>
-  <span>BUILD 001</span>
-</footer>
+<footer class="site-footer" id="footer"></footer>
 
+<script src="data/profile.js"></script>
+<script src="data/projects.js"></script>
+<script src="assets/js/common.js"></script>
+<script src="assets/js/index.js"></script>
 </body>
 </html>
