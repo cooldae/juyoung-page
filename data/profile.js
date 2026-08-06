@@ -23,7 +23,8 @@ window.PROFILE = {
   phone: "+82 10-8222-8762",
   showPhone: false,
 
-  languages: ["한국어", "영어", "일본어"],
+  // 첫 화면 알약 배지로 표시됩니다. 비워두면 아무것도 안 나옵니다.
+  languages: [],
 
   strengths: [
     "다양한 경험과 다양한 지식",
