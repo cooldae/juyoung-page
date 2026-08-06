@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>JUYOUNG KIM</title>
+<meta name="description" content="김주영 소개 페이지" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>◆</text></svg>" />
+<style>
+  :root {
+    --bg: #0b0b0d;
+    --fg: #f2f2f0;
+    --muted: #6f6f76;
+    --line: #1e1e22;
+    --accent: #d8ff3e;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: "Pretendard", -apple-system, "Segoe UI", "Malgun Gothic", sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 8vh 7vw;
+    max-width: 1100px;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .tag {
+    font-size: 0.75rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 2.2rem;
+  }
+
+  .tag::before {
+    content: "";
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    margin-right: 0.7em;
+    vertical-align: 0.15em;
+  }
+
+  h1 {
+    font-size: clamp(2.8rem, 11vw, 7.5rem);
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    font-weight: 600;
+  }
+
+  h1 span {
+    display: block;
+    color: var(--muted);
+  }
+
+  .lead {
+    margin-top: 2.5rem;
+    max-width: 42ch;
+    font-size: clamp(1rem, 2.4vw, 1.2rem);
+    color: #b4b4b8;
+  }
+
+  .rule {
+    margin: 3.5rem 0 2rem;
+    height: 1px;
+    background: var(--line);
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.2rem 2.8rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  .meta div span {
+    display: block;
+    color: var(--fg);
+    margin-top: 0.2rem;
+  }
+
+  footer {
+    padding: 1.6rem 7vw;
+    border-top: 1px solid var(--line);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    color: #3f3f45;
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    main > * {
+      animation: rise 0.7s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+    }
+    .tag  { animation-delay: 0.05s; }
+    h1    { animation-delay: 0.12s; }
+    .lead { animation-delay: 0.24s; }
+    .rule { animation-delay: 0.32s; }
+    .meta { animation-delay: 0.38s; }
+  }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<main>
+  <p class="tag">Under construction</p>
+
+  <h1>JUYOUNG<span>KIM</span></h1>
+
+  <p class="lead">
+    소개 페이지를 준비하고 있습니다.
+    지금 보이는 화면은 배포가 정상적으로 동작하는지 확인하기 위한 임시 페이지입니다.
+  </p>
+
+  <div class="rule"></div>
+
+  <div class="meta">
+    <div>Status<span>Deploy check</span></div>
+    <div>Host<span>GitHub Pages</span></div>
+    <div>Contact<span>admin@zipshowkorea.com</span></div>
+  </div>
+</main>
+
+<footer>
+  <span>&copy; 2026 Juyoung Kim</span>
+  <span>BUILD 001</span>
+</footer>
+
+</body>
+</html>
