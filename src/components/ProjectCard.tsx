@@ -15,7 +15,8 @@ export function ProjectCard({ project }: { project: Project }) {
       <div className="pc-top">
         {project.featured && (
           <span className="badge badge-featured">
-            <span aria-hidden="true">★</span> 대표작
+            <span aria-hidden="true">★</span>
+            <span className="sr-only">대표작</span>
           </span>
         )}
         {project.categories?.[0] && <span className="pc-category">{project.categories[0]}</span>}

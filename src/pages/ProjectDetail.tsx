@@ -66,7 +66,8 @@ export default function ProjectDetail() {
             <div className="detail-meta">
               {project.featured && (
                 <span className="badge badge-featured">
-                  <span aria-hidden="true">★</span> 대표작
+                  <span aria-hidden="true">★</span>
+                  <span className="sr-only">대표작</span>
                 </span>
               )}
               {project.categories?.map((c) => (
