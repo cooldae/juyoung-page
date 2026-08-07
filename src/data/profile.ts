@@ -21,6 +21,11 @@ export const PROFILE: Profile = {
   // 그 아래 소개 문단. 비워두면 아무것도 안 나옵니다.
   intro: "",
 
+  // About 섹션에 표시할 사진. public/ 폴더에 넣고 파일명만 적으세요.
+  // 배경이 없는 PNG 를 넣으면 아래 연한 원 위에 인물만 올라갑니다.
+  // 비워두면("") 사진 자리가 통째로 사라집니다.
+  avatar: "avatar.png",
+
   email: "juyoung.kim.dev@gmail.com",
 
   // ⚠️ 이 파일은 공개 저장소에 그대로 올라갑니다.

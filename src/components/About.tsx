@@ -13,7 +13,19 @@ export function About() {
           <h2>About</h2>
         </div>
 
-        <div className="about-grid">
+        <div className="about-body">
+          {p.avatar && (
+            <img
+              className="about-avatar reveal"
+              src={`${import.meta.env.BASE_URL}${p.avatar}`}
+              alt={`${p.nameKo} 프로필 사진`}
+              width={224}
+              height={224}
+              loading="lazy"
+            />
+          )}
+
+          <div className="about-grid">
           <div className="card reveal">
             <h3>Career</h3>
             <div className="career">
@@ -50,6 +62,7 @@ export function About() {
               </div>
             </div>
           )}
+          </div>
         </div>
       </div>
     </section>

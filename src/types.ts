@@ -35,6 +35,8 @@ export type Profile = {
   role: string;
   /** 그 아래 소개 문단. 비워두면 안 나옵니다 */
   intro: string;
+  /** About 에 표시할 사진. public/ 안의 파일명. 비워두면 안 나옵니다 */
+  avatar?: string;
   email: string;
   phone: string;
   showPhone: boolean;

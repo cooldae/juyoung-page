@@ -442,9 +442,30 @@ a:hover { color: var(--accent); }
 
 /* ---------- about / skills ---------- */
 
+/* 사진 + 카드들 */
+.about-body {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(20px, 3vw, 36px);
+}
+
+.about-avatar {
+  flex: none;
+  width: clamp(88px, 11vw, 116px);
+  height: clamp(88px, 11vw, 116px);
+  border-radius: 50%;
+  object-fit: cover;
+  /* 배경 없는 PNG 를 쓰므로 아래에 따뜻한 원을 깔아 줍니다 */
+  background: var(--accent-wash);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-sm);
+}
+
 .about-grid {
+  flex: 1;
+  min-width: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: clamp(20px, 3vw, 32px);
 }
 
@@ -1021,6 +1042,8 @@ a:hover { color: var(--accent); }
 /* ---------- 반응형 ---------- */
 
 @media (max-width: 860px) {
+  .about-body { flex-direction: column; align-items: flex-start; }
+  .about-grid { width: 100%; }
   .hero-inner { grid-template-columns: 1fr; }
   .hero-stats {
     grid-auto-flow: column;
