@@ -122,7 +122,7 @@ export const PROJECTS: Project[] = [
       "Unity 대형 화면에서 자이로 센서 기반 다트 조준·투척 로직 구현",
       "다수 참가자 동시 참여 처리 및 랭킹 시스템 구현",
     ],
-    images: [],
+    images: ["project_gangneung-dart-game_1.jpg", "project_gangneung-dart-game_2.jpg"],
     youtube: "",
   },
 
@@ -168,7 +168,7 @@ export const PROJECTS: Project[] = [
       "정답/오답 처리와 퍼즐 완료 조건 처리 구현",
       "태블릿 환경에 맞춘 UI/UX 및 터치 입력 처리 구현",
     ],
-    images: [],
+    images: ["project_royal-cuisine-minigame_1.jpg", "project_royal-cuisine-minigame_2.jpg", "project_royal-cuisine-minigame_3.jpg", "project_royal-cuisine-minigame_4.jpg", "project_royal-cuisine-minigame_5.jpg", "project_royal-cuisine-minigame_6.jpg"],
     youtube: "",
   },
 
@@ -188,7 +188,7 @@ export const PROJECTS: Project[] = [
       "사용자 터치/접근 위치 기반 영역별 인터랙션 반응 출력 구현",
       "전시 환경에 맞춘 센서 인식 범위 보정 및 콘텐츠 동작 안정화 구현",
     ],
-    images: [],
+    images: ["project_jeju-dokdo-center_1.jpg", "project_jeju-dokdo-center_2.jpg", "project_jeju-dokdo-center_3.jpg"],
     youtube: "",
   },
 
@@ -231,7 +231,7 @@ export const PROJECTS: Project[] = [
       "대형 화면에서 전체 플레이어 상태 및 게임 진행 상황 출력 구현",
       "다중 사용자 대전 플레이 환경에 맞춘 네트워크 안정화 구현",
     ],
-    images: [],
+    images: ["project_color2life-gangneung_1.jpg"],
     youtube: "",
   },
 
@@ -275,7 +275,7 @@ export const PROJECTS: Project[] = [
       "FFmpeg를 활용한 녹화 영상 저장 및 Firebase Storage 업로드 처리 구현",
       "Firebase Storage URL을 TCP Socket으로 Unity에 반환하고 QR 코드로 변환하여 사용자 다운로드 기능 구현",
     ],
-    images: [],
+    images: ["project_ai-live-drawing_1.jpg", "project_ai-live-drawing_2.jpg", "project_ai-live-drawing_3.jpg", "project_ai-live-drawing_4.jpg", "project_ai-live-drawing_5.jpg", "project_ai-live-drawing_6.jpg", "project_ai-live-drawing_7.jpg", "project_ai-live-drawing_8.jpg"],
     youtube: "",
   },
 
@@ -320,7 +320,7 @@ export const PROJECTS: Project[] = [
       "AR Foundation Image Tracking 기반 이미지 마커 인식 기능 구현",
       "AR모드 내 지역별 3D 모델 표시 및 음성 해설 연동 구현",
     ],
-    images: [],
+    images: ["project_jeju-tablet-app_1.jpg", "project_jeju-tablet-app_2.jpg", "project_jeju-tablet-app_3.jpg", "project_jeju-tablet-app_4.jpg"],
     youtube: "",
   },
 
@@ -385,7 +385,7 @@ export const PROJECTS: Project[] = [
     achievement:
       "전체 인터랙션 콘텐츠 단독 개발 및 태국 현장 납품 수행. 장시간 전시 운영을 고려한 안정화 구현으로 납품 후 약 1년간 안정 운영 중.",
     note: "출장 — 태국 파타야 현장 설치·테스트·납품 총 20일 (2025.05.21 ~ 05.29 / 2025.07.01 ~ 07.11)",
-    images: ["01.jpg", "02.jpg"],
+    images: ["project_pado-art-museum_1.jpg", "project_pado-art-museum_2.jpg", "project_pado-art-museum_3.jpg", "project_pado-art-museum_4.jpg", "project_pado-art-museum_5.jpg", "project_pado-art-museum_6.jpg"],
     youtube: [
       "https://www.youtube.com/watch?v=1SzYk_Ki5vk",
       "https://youtu.be/G__iZo3F4ts",
@@ -450,7 +450,7 @@ export const PROJECTS: Project[] = [
       "드로잉 데이터 기반 3D 콘텐츠 출력 연동 구현",
       "관련 기술 특허 등록 기여",
     ],
-    images: [],
+    images: ["project_livesketch-tablet-3d_1.jpg", "project_livesketch-tablet-3d_2.jpg", "project_livesketch-tablet-3d_3.jpg", "project_livesketch-tablet-3d_4.jpg", "project_livesketch-tablet-3d_5.jpg"],
     youtube: "",
   },
 
@@ -470,7 +470,7 @@ export const PROJECTS: Project[] = [
       "사용자 드로잉 데이터의 Socket 통신 기반 전송 구현",
       "미디어월 PC에서 수신 데이터 기반 라이브스케치 콘텐츠 출력 구현",
     ],
-    images: [],
+    images: ["project_livesketch-tablet-2d_1.jpg", "project_livesketch-tablet-2d_2.jpg"],
     youtube: "",
   },
 
@@ -549,7 +549,7 @@ export const PROJECTS: Project[] = [
     links: [
       { label: "사용 장비 — Long Range Laser PTZ Camera", url: "https://www.unviot.com/long-range-laser-ptz-camera-monocular-type-product/" },
     ],
-    images: [],
+    images: ["project_dmz-ar-telescope_1.jpg"],
     youtube: "",
   },
 
@@ -567,7 +567,7 @@ export const PROJECTS: Project[] = [
       "전시 공간 인식을 위한 Vuforia Area Target 환경 구성",
       "박물관 관람 동선 및 전시 지점에 맞춘 AR 도슨트 기능 구현",
     ],
-    images: [],
+    images: ["project_world-script-museum-ar_1.jpg", "project_world-script-museum-ar_2.jpg", "project_world-script-museum-ar_3.jpg"],
     youtube: "",
   },
 
@@ -586,7 +586,7 @@ export const PROJECTS: Project[] = [
       "Vuforia Area Target 기반으로 충남도청 내부 공간을 인식하고, 사용자가 이동 가능한 구역을 AR 경로로 시각화",
       "현재 위치와 목적지를 기준으로 AR 내비게이션 안내 기능 구현",
     ],
-    images: [],
+    images: ["project_chungnam-ar-navigation_1.jpg", "project_chungnam-ar-navigation_2.jpg", "project_chungnam-ar-navigation_3.jpg", "project_chungnam-ar-navigation_4.jpg"],
     youtube: "",
   },
 
@@ -609,7 +609,7 @@ export const PROJECTS: Project[] = [
       "입출차 감지·배터리·주파수 정보 송수신 구조 정의",
       "약 3,000대 규모 야외 주차 센서 설치 및 현장 통신 테스트 참여",
     ],
-    images: [],
+    images: ["project_parking-sensor-protocol_1.jpg", "project_parking-sensor-protocol_2.jpg"],
     youtube: "",
   },
 
@@ -651,7 +651,7 @@ export const PROJECTS: Project[] = [
       "현장 사용 환경에 맞춘 AR 콘텐츠 테스트 및 안정화 참여",
       "앱 납품 및 배포 과정 참여",
     ],
-    images: [],
+    images: ["project_museum-ar-content_1.jpg", "project_museum-ar-content_2.jpg", "project_museum-ar-content_3.jpg"],
     youtube: "",
   },
 
