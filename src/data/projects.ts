@@ -253,7 +253,7 @@ export const PROJECTS: Project[] = [
       "사용자 색상·성별·나이 데이터 API 수집 연동 구현",
       "다중 사용자 접속 및 플레이 데이터 처리 구현",
     ],
-    images: [],
+    images: ["project_color2life-haman_1.jpg"],
     youtube: "",
   },
 
