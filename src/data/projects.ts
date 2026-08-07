@@ -148,7 +148,12 @@ export const PROJECTS: Project[] = [
     ],
     note: "활용처 — 나라장터엑스포 2026 / Content Tokyo 2026 전시",
     images: [],
-    youtube: "",
+    youtube: [
+      // project_color2life-alphabet_1.mp4
+      { url: "https://youtu.be/MR_Jr6IzwdQ", label: "캐릭터 색칠" },
+      // project_color2life-alphabet_2.mp4
+      { url: "https://youtu.be/K8qjgvfAmxA", label: "게임 플레이" },
+    ],
   },
 
   {
