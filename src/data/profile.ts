@@ -22,9 +22,9 @@ export const PROFILE: Profile = {
   intro: "",
 
   // About 섹션에 표시할 사진. public/ 폴더에 넣고 파일명만 적으세요.
-  // 배경이 없는 PNG 를 넣으면 아래 연한 원 위에 인물만 올라갑니다.
+  // 원형으로 잘려 보이므로 인물이 가운데 오도록 미리 정사각형으로 맞춰 두는 게 좋습니다.
   // 비워두면("") 사진 자리가 통째로 사라집니다.
-  avatar: "avatar.png",
+  avatar: "avatar.jpg",
 
   email: "juyoung.kim.dev@gmail.com",
 
