@@ -457,9 +457,12 @@ export const PROJECTS: Project[] = [
       "전체 인터랙션 콘텐츠 단독 개발 및 태국 현장 납품 수행. 장시간 전시 운영을 고려한 안정화 구현으로 납품 후 약 1년간 안정 운영 중.",
     note: "출장 — 태국 파타야 현장 설치·테스트·납품 총 20일 (2025.05.21 ~ 05.29 / 2025.07.01 ~ 07.11)",
     images: ["project_pado-art-museum_1.jpg", "project_pado-art-museum_2.jpg", "project_pado-art-museum_3.jpg", "project_pado-art-museum_4.jpg", "project_pado-art-museum_5.jpg", "project_pado-art-museum_6.jpg"],
+    // 이 둘은 파일 이름 규칙을 정하기 전에 올린 영상이라
+    // 어느 로컬 파일에서 온 것인지 확인되지 않았습니다.
+    // 유튜브 제목("project pattaya main" / "project pattaya flower") 기준입니다.
     youtube: [
-      "https://www.youtube.com/watch?v=1SzYk_Ki5vk",
-      "https://youtu.be/G__iZo3F4ts",
+      { url: "https://www.youtube.com/watch?v=1SzYk_Ki5vk", label: "메인관 Timespace" },
+      { url: "https://youtu.be/G__iZo3F4ts", label: "꽃 관" },
     ],
   },
 
