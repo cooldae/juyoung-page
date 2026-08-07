@@ -91,7 +91,7 @@ function useMagneticChips(
 
 /** 큰 글자 — 한 글자씩 등장하고, 커서가 지나가면 물결처럼 반응합니다.
  *  화면 낭독기에는 쪼개진 글자가 아니라 전체 문장으로 읽힙니다. */
-function Headline({ text }: { text: string }) {
+function Headline({ text, sub }: { text: string; sub?: string }) {
   const chars = Array.from(text);
   const rootRef = useRef<HTMLHeadingElement | null>(null);
 
@@ -148,7 +148,7 @@ function Headline({ text }: { text: string }) {
   }, [text]);
 
   return (
-    <h1 className="headline" aria-label={text} ref={rootRef}>
+    <h1 className="headline" aria-label={sub ? `${text} ${sub}` : text} ref={rootRef}>
       <span aria-hidden="true">
         {chars.map((ch, i) => {
           const delay = { animationDelay: `${i * CHAR_STEP}s` };
@@ -161,6 +161,17 @@ function Headline({ text }: { text: string }) {
             </span>
           );
         })}
+
+        {/* 영문 이름이 다 나타난 뒤 한글 이름이 따라옵니다.
+            커서 물결에는 반응하지 않습니다 (.ch-in 이 아니므로) */}
+        {sub && (
+          <span
+            className="headline-ko"
+            style={{ animationDelay: `${chars.length * CHAR_STEP + 0.08}s` }}
+          >
+            {sub}
+          </span>
+        )}
       </span>
     </h1>
   );
@@ -223,7 +234,7 @@ export function Hero() {
               {p.eyebrow}
             </p>
 
-            <Headline text={p.headline} />
+            <Headline text={p.headline} sub={p.nameKo} />
 
             {p.role && (
               <p className="hero-role fade-up" style={{ animationDelay: `${roleDelay}s` }}>

@@ -291,6 +291,19 @@ a:hover { color: var(--accent); }
   width: 0.3em;
 }
 
+/* 영문 이름 옆 작은 한글 이름 */
+.headline-ko {
+  display: inline-block;
+  margin-left: 0.42em;
+  font-size: 0.32em;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--text-soft);
+  white-space: nowrap;
+  opacity: 0;
+  animation: fadeUp 0.6s var(--ease) forwards;
+}
+
 /* 등장 애니메이션과 호버 변형이 부딪히지 않게 안쪽 span 이 호버를 맡습니다 */
 .headline .ch-in {
   display: inline-block;
@@ -1045,7 +1058,7 @@ a:hover { color: var(--accent); }
   }
   .reveal { opacity: 1; transform: none; }
   /* 등장 애니메이션 없이 바로 보이게 */
-  .fade-up, .headline .ch { opacity: 1; transform: none; animation: none; }
+  .fade-up, .headline .ch, .headline-ko { opacity: 1; transform: none; animation: none; }
   .hero-glow { display: none; }
   .scroll-hint { opacity: 1; animation: none; }
   .scroll-hint-line { animation: none; transform: none; opacity: 1; }
