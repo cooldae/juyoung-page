@@ -152,7 +152,7 @@ export const PROJECTS: Project[] = [
       "Unity에서 모바일을 총처럼 사용하는 조준·발사 인터랙션 구현",
       "대형 화면 기반 좀비 슈팅 게임 로직 및 다중 사용자 참여 구조 구현",
     ],
-    images: [],
+    images: ["project_socket-zombie-shooting_1.png", "project_socket-zombie-shooting_2.png"],
     youtube: "",
   },
 

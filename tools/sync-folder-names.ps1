@@ -66,6 +66,7 @@ $MAP = @{
   "컬러투라이프 강릉"                    = "color2life-gangneung"
   "컬러투라이프 함안[2]"                 = "color2life-haman"
   "소래역사관 [2]"                       = "sorae-interactive"
+  "소켓 총 게임"                         = "socket-zombie-shooting"
 }
 
 $IMG_UP = "사진 업로드"; $IMG_NOUP = "사진 미업로드"; $IMG_ORIG = "사진 원본"
@@ -89,6 +90,17 @@ function Save-Jpeg($bmp, $path, $q) {
   $e = New-Object System.Drawing.Imaging.EncoderParameters(1)
   $e.Param[0] = New-Object System.Drawing.Imaging.EncoderParameter([System.Drawing.Imaging.Encoder]::Quality, [int64]$q)
   $bmp.Save($path, $codec, $e)
+}
+
+# 흐름도·도표처럼 글자와 얇은 선이 많은 PNG 는 JPEG 로 바꾸면 뭉개집니다.
+# 이미 충분히 작고 크기도 알맞으면 그대로 씁니다.
+function Should-KeepPng([System.IO.FileInfo]$f) {
+  if ($f.Extension -ne ".png") { return $false }
+  if ($f.Length -gt $MaxBytes) { return $false }
+  $b = [System.Drawing.Bitmap]::FromFile($f.FullName)
+  $wide = $b.Width
+  $b.Dispose()
+  return ($wide -le $MaxWidth)
 }
 
 function Optimize-Image([string]$in, [string]$out) {
@@ -234,14 +246,31 @@ foreach ($d in (Get-ChildItem -LiteralPath $Root -Directory | Sort-Object Name))
     "  [$base] 새 영상 → '$VID_NOUP' : $($f.Name)"
   }
 
-  # 3) 최상위에 새로 넣은 사진 → 줄여서 사진 업로드, 원본은 사진 원본
+  # 3) 새로 넣은 사진 → 줄여서 사진 업로드, 원본은 사진 원본
+  #    최상위에 둔 것과, [사진 원본] 에 넣었지만 아직 업로드본이 없는 것 둘 다 처리합니다
   $iNext = Next-Index $slug @($pUp)
-  foreach ($f in (Files-In $dir $IMG_EXT)) {
-    $newName = "project_{0}_{1}.jpg" -f $slug, $iNext
+  $newPhotos = @(Files-In $dir $IMG_EXT)
+  if ((Files-In $pUp $IMG_EXT).Count -eq 0) {
+    $newPhotos += @(Files-In $pOrig $IMG_EXT)
+  }
+
+  foreach ($f in $newPhotos) {
+    $keepPng = Should-KeepPng $f
+    $ext = if ($keepPng) { ".png" } else { ".jpg" }
+    $newName = "project_{0}_{1}{2}" -f $slug, $iNext, $ext
+    $outPath = Join-Path $pUp $newName
+
     if (-not $WhatIf) {
-      $r = Optimize-Image $f.FullName (Join-Path $pUp $newName)
-      Move-Item -LiteralPath $f.FullName -Destination (Join-Path $pOrig $f.Name) -Force
-      "  [$base] 새 사진 → $newName  $($r.W)x$($r.H)  $([math]::Round($f.Length/1KB))KB → $([math]::Round($r.Bytes/1KB))KB"
+      if ($keepPng) {
+        Copy-Item -LiteralPath $f.FullName -Destination $outPath -Force
+        "  [$base] 새 사진 → $newName  (PNG 유지 — 글자·선이 뭉개지지 않게)  $([math]::Round($f.Length/1KB))KB"
+      } else {
+        $r = Optimize-Image $f.FullName $outPath
+        "  [$base] 새 사진 → $newName  $($r.W)x$($r.H)  $([math]::Round($f.Length/1KB))KB → $([math]::Round($r.Bytes/1KB))KB"
+      }
+      if ($f.DirectoryName -ne $pOrig) {
+        Move-Item -LiteralPath $f.FullName -Destination (Join-Path $pOrig $f.Name) -Force
+      }
     } else {
       "  [$base] 새 사진 → $newName (예정)"
     }
