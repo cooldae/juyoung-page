@@ -4,6 +4,7 @@ import { Hero } from "../components/Hero";
 import { About } from "../components/About";
 import { ProjectList } from "../components/ProjectList";
 import { useDocumentTitle, useReveal } from "../hooks/useReveal";
+import { scrollToSection, scrollToTop } from "../lib/scroll";
 
 export default function Home() {
   const { hash } = useLocation();
@@ -14,14 +15,16 @@ export default function Home() {
   );
   useReveal([]);
 
-  // 헤더 메뉴(#about 등)로 들어왔을 때 해당 위치로 이동
+  // 다른 페이지에서 #projects 같은 주소로 들어왔을 때 해당 위치로 이동.
+  // (첫 화면 안에서 메뉴를 누른 경우는 Header 가 직접 처리합니다)
   useEffect(() => {
     if (!hash) {
-      window.scrollTo(0, 0);
+      scrollToTop();
       return;
     }
-    const el = document.querySelector(hash);
-    if (el) el.scrollIntoView({ behavior: "smooth" });
+    // 첫 그리기가 끝난 뒤라야 위치가 정확합니다
+    const id = window.requestAnimationFrame(() => scrollToSection(hash.slice(1)));
+    return () => window.cancelAnimationFrame(id);
   }, [hash]);
 
   return (
