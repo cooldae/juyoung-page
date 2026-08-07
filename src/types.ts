@@ -27,7 +27,13 @@ export type Education = {
 export type Profile = {
   nameEn: string;
   nameKo: string;
-  tagline: string;
+  /** 첫 화면 맨 위 작은 글씨 */
+  eyebrow: string;
+  /** 첫 화면 큰 글자. 글자 하나씩 나타납니다 */
+  headline: string;
+  /** 큰 글자 아래 한 줄 */
+  role: string;
+  /** 그 아래 소개 문단. 비워두면 안 나옵니다 */
   intro: string;
   email: string;
   phone: string;

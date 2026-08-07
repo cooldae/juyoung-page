@@ -8,11 +8,17 @@ export const PROFILE: Profile = {
   nameEn: "KIM JUYOUNG",
   nameKo: "김주영",
 
-  // 첫 화면 큰 문장 (\n 을 넣으면 줄바꿈됩니다)
-  tagline: "김주영의 포트폴리오",
+  // 첫 화면 맨 위 작은 글씨
+  eyebrow: "김주영 · 포트폴리오",
 
-  // 큰 문장 아래 소개 문단. 비워두면 아무것도 안 나옵니다.
-  // 지금은 문단 대신 아래 skills 목록이 그 자리에 표시됩니다.
+  // 첫 화면 큰 글자. 글자 하나씩 차례로 나타납니다.
+  // 너무 길면 등장이 늘어지니 20자 안쪽을 권합니다.
+  headline: "KIM JUYOUNG",
+
+  // 큰 글자 바로 아래 한 줄
+  role: "Unity Developer",
+
+  // 그 아래 소개 문단. 비워두면 아무것도 안 나옵니다.
   intro: "",
 
   email: "juyoung.kim.dev@gmail.com",
