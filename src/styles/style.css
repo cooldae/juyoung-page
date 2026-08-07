@@ -594,6 +594,23 @@ a:hover { color: var(--accent); }
   color: inherit;
 }
 
+/* 대표작 — 목록 맨 위에 오고, 테두리와 바탕으로 한 번 더 구분됩니다 */
+.project-card.is-featured {
+  border-color: color-mix(in srgb, var(--accent) 48%, var(--line));
+  box-shadow: var(--shadow-md);
+  background:
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--accent-wash) 60%, var(--surface)),
+      var(--surface) 42%
+    );
+}
+
+.project-card.is-featured:hover {
+  border-color: var(--accent);
+  box-shadow: var(--shadow-lg);
+}
+
 .pc-top {
   display: flex;
   align-items: center;
@@ -625,7 +642,18 @@ a:hover { color: var(--accent); }
   padding: 2px 8px;
   border-radius: 999px;
   background: var(--accent);
-  color: #fffdf8;
+  /* 배경색이 밝아지는 다크 모드에서도 글자가 읽히도록 배경색을 글자색으로 씁니다 */
+  color: var(--bg);
+  white-space: nowrap;
+}
+
+.badge-featured {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  padding: 2px 10px;
+  background: var(--accent-deep);
+  font-weight: 600;
 }
 
 .pc-title {

@@ -8,8 +8,16 @@ export function ProjectCard({ project }: { project: Project }) {
   const rest = project.stack.length - MAX_CHIPS;
 
   return (
-    <Link className="project-card reveal" to={`/project/${project.slug}`}>
+    <Link
+      className={"project-card reveal" + (project.featured ? " is-featured" : "")}
+      to={`/project/${project.slug}`}
+    >
       <div className="pc-top">
+        {project.featured && (
+          <span className="badge badge-featured">
+            <span aria-hidden="true">★</span> 대표작
+          </span>
+        )}
         {project.categories?.[0] && <span className="pc-category">{project.categories[0]}</span>}
         <span className="pc-company">{project.company}</span>
         {project.status && <span className="badge">{project.status}</span>}

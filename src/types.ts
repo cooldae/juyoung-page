@@ -68,6 +68,9 @@ export type Project = {
   /** 정렬용 "YYYY-MM". 최신이 위로. 같으면 파일에 적힌 순서 */
   start: string;
   status?: string;
+  /** 대표작. 배지가 붙고 날짜와 상관없이 목록 맨 위로 올라옵니다.
+   *  너무 많으면 의미가 없어지니 3~5개 정도로 유지하세요. */
+  featured?: boolean;
   overview: string;
   stack: string[];
   work: string[];

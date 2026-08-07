@@ -1,11 +1,15 @@
 import { CATEGORY_ORDER, PROJECTS } from "../data/projects";
 import type { Project } from "../types";
 
-/** start 내림차순. 값이 같으면 data/projects.ts 에 적힌 순서를 따릅니다.
+/** 대표작(featured)이 먼저, 그다음 start 내림차순.
+ *  값이 같으면 data/projects.ts 에 적힌 순서를 따릅니다.
  *  (자바스크립트 sort 는 순서가 보장되는 안정 정렬입니다) */
-export const sortedProjects: Project[] = [...PROJECTS].sort((a, b) =>
-  String(b.start ?? "").localeCompare(String(a.start ?? ""))
-);
+export const sortedProjects: Project[] = [...PROJECTS].sort((a, b) => {
+  const fa = a.featured ? 1 : 0;
+  const fb = b.featured ? 1 : 0;
+  if (fa !== fb) return fb - fa;
+  return String(b.start ?? "").localeCompare(String(a.start ?? ""));
+});
 
 export function findProject(slug: string | undefined) {
   const index = sortedProjects.findIndex((p) => p.slug === slug);

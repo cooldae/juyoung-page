@@ -64,6 +64,11 @@ export default function ProjectDetail() {
             </Link>
             <h1>{project.title}</h1>
             <div className="detail-meta">
+              {project.featured && (
+                <span className="badge badge-featured">
+                  <span aria-hidden="true">★</span> 대표작
+                </span>
+              )}
               {project.categories?.map((c) => (
                 <span className="pc-category" key={c}>
                   {c}

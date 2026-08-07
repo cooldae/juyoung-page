@@ -128,6 +128,7 @@ export const PROJECTS: Project[] = [
 
   {
     slug: "color2life-alphabet",
+    featured: true,
     title: "컬러투라이프 알파벳 어드벤처 버전 개발",
     company: "집쇼코리아(주)",
     categories: ["게임", "드로잉 · 미디어아트"],
@@ -301,6 +302,7 @@ export const PROJECTS: Project[] = [
 
   {
     slug: "jeju-tablet-app",
+    featured: true,
     title: "국가유산진흥원 「한눈에 보는 제주도」 태블릿 앱 개발",
     company: "집쇼코리아(주)",
     categories: ["앱 · 웹", "AR · VR · IoT"],
@@ -343,6 +345,7 @@ export const PROJECTS: Project[] = [
 
   {
     slug: "pado-art-museum",
+    featured: true,
     title: "파타야 Pado Art Museum 인터랙션 콘텐츠 개발 및 출장 납품",
     company: "집쇼코리아(주)",
     categories: ["전시 인터랙션"],
@@ -570,6 +573,7 @@ export const PROJECTS: Project[] = [
 
   {
     slug: "chungnam-ar-navigation",
+    featured: true,
     title: "충남도청 AR 내비게이션",
     company: "집쇼코리아(주)",
     categories: ["AR · VR · IoT"],
@@ -588,6 +592,7 @@ export const PROJECTS: Project[] = [
 
   {
     slug: "parking-sensor-protocol",
+    featured: true,
     title: "자체 야외 주차 센서 통신 프로토콜 R&D 및 현장 설치 참여",
     company: "인터보이드(주)",
     categories: ["AR · VR · IoT"],
