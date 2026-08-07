@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<title>KIM JUYOUNG</title>
+<script>
+  /* GitHub Pages 는 /project/xxx 같은 주소를 모르기 때문에 이 페이지를 돌려줍니다.
+     원래 가려던 경로를 ?redirect= 에 담아 index.html 로 넘기면
+     src/main.tsx 가 진짜 주소로 되돌립니다. */
+  (function () {
+    var base = "/juyoung-page/";
+    var l = window.location;
+    var path = l.pathname.indexOf(base) === 0 ? l.pathname.slice(base.length) : "";
+    l.replace(base + "?redirect=" + encodeURIComponent(path + l.search.replace(/^\?/, "&") + l.hash));
+  })();
+</script>
+<meta name="robots" content="noindex" />
+</head>
+<body></body>
+</html>

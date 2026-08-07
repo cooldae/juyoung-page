@@ -1,9 +1,10 @@
+import type { Profile } from "../types";
 /* ============================================================
    프로필 데이터
    이름, 소개, 연락처, 경력, 스킬을 여기서 수정합니다.
    ============================================================ */
 
-window.PROFILE = {
+export const PROFILE: Profile = {
   nameEn: "KIM JUYOUNG",
   nameKo: "김주영",
 
