@@ -4,7 +4,7 @@ import { scrollToSection, scrollToTop } from "../lib/scroll";
 
 const MENU = [
   { id: "projects", label: "Projects" },
-  { id: "about", label: "About", optional: true },
+  { id: "about", label: "About" },
   { id: "footer", label: "Contact" },
 ];
 
@@ -42,7 +42,6 @@ export function Header() {
             <Link
               key={m.id}
               to={`/#${m.id}`}
-              data-optional={m.optional ? "" : undefined}
               onClick={(e) => {
                 // 첫 화면에 있을 때는 직접 스크롤합니다.
                 // 해시가 그대로면 주소 변경이 일어나지 않아 같은 메뉴를

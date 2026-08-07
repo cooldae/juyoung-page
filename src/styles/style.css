@@ -1066,8 +1066,11 @@ a:hover { color: var(--accent); }
   .detail-nav .next { text-align: left; }
 }
 
-@media (max-width: 400px) {
-  .site-nav a[data-optional] { display: none; }
+/* 아주 좁은 화면에서는 메뉴를 조금 붙입니다.
+   320px 에서도 로고와 20px 떨어져 있어 메뉴를 숨길 필요는 없습니다. */
+@media (max-width: 360px) {
+  .site-nav { gap: 12px; font-size: 0.78rem; }
+  .brand { font-size: 0.82rem; letter-spacing: 0.1em; }
 }
 
 /* ---------- 동작 줄이기 설정 존중 ---------- */
