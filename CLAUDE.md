@@ -3,8 +3,8 @@
 > **다른 세션에서 이어받는 경우 [HANDOFF.md](HANDOFF.md) 를 먼저 읽으세요.**
 > 결정 사항과 그 이유, 남은 일, 함정이 정리되어 있습니다.
 
-김주영 개인 **소개 페이지**. 작업물 나열형 포트폴리오가 아니라 "사람 + 프로젝트 기록"이 목적.
-(별도 폴더 `unity-portfolio`와는 다른 사이트)
+김주영 개인 **포트폴리오**. 채용 담당자가 보는 것을 전제로 합니다.
+Unity 기반 전시 인터랙션 / 게임 / AR·VR / IoT 프로젝트 **30건**의 기록이 핵심입니다.
 
 ## 배포
 
@@ -12,75 +12,90 @@
 |---|---|
 | 저장소 | https://github.com/cooldae/juyoung-page |
 | 공개 주소 | https://cooldae.github.io/juyoung-page/ |
-| 방식 | GitHub Pages — `main` 브랜치 `/ (root)` 직접 서빙 (빌드 없음) |
-| dev 포트 | 5220 |
+| 방식 | **GitHub Actions 로 빌드 후 Pages 배포** (`.github/workflows/deploy.yml`) |
+| dev 서버 | `npm run dev` → http://localhost:5220/juyoung-page/ |
 
-`main`에 push하면 30초~2분 뒤 자동 반영.
+`main` 에 push 하면 자동으로 빌드·배포됩니다. 보통 2~4분.
+**타입 오류나 빌드 실패가 나면 배포가 멈춥니다.** 깨진 사이트가 올라가지 않는다는 뜻입니다.
 
-## 설계 원칙
+## 기술 구성
 
-**프로젝트가 30개 넘습니다. 프로젝트마다 HTML 파일을 만들지 마세요.**
-데이터 파일 1개 + 상세 템플릿 1개로 전부 처리합니다.
+Vite + React 19 + TypeScript + React Router 7. 스타일은 순수 CSS 한 파일.
 
-- `data/projects.js` 의 `window.PROJECTS` 배열이 유일한 원본
-- `index.html` 이 목록을, `project.html?id=<slug>` 이 상세를 렌더링
-- 화면을 고칠 일이 생기면 템플릿 한 곳만 고치면 전체에 반영됨
+```bash
+npm run dev        # 개발 서버
+npm run build      # 타입 검사 + 빌드
+npm run typecheck  # 타입 검사만
+npm run preview    # 빌드 결과물 확인 (5221)
+```
+
+## 핵심 설계
+
+프로젝트가 30건이고 계속 늘어납니다. **프로젝트마다 페이지를 만들지 마세요.**
+
+```
+데이터 파일 1개  +  상세 템플릿 1개  =  프로젝트 무한개
+```
+
+- `src/data/projects.ts` 의 `PROJECTS` 배열이 **유일한 원본**
+- `src/pages/ProjectDetail.tsx` 하나가 모든 상세 페이지를 그림
+- 필터 분류(`CATEGORY_ORDER`)와 회사 목록도 데이터에서 자동 생성
+
+**이 구조를 깨지 마세요.** 사용자의 최우선 요구가 "직접 추가할 수 있는 구조, 업데이트가 쉽게" 입니다.
+프로젝트 추가는 `src/data/projects.ts` 에 블록 하나 붙여넣는 것으로 끝나야 합니다.
 
 ## 구조
 
 ```
 juyoung-page/
-├─ index.html              ← 소개 + 이력 + 프로젝트 목록
-├─ project.html            ← 상세 템플릿 (?id=<slug>)
-├─ data/
-│   ├─ profile.js          ← 이름·소개·연락처·경력·스킬
-│   └─ projects.js         ← ★ 프로젝트 전부. 보통 여기만 수정
-├─ assets/
-│   ├─ css/style.css       ← 색은 :root 변수만 고치면 전체 반영
-│   ├─ js/common.js        ← 공통 유틸 (이스케이프·유튜브 파싱·정렬·reveal)
-│   ├─ js/index.js         ← 목록 페이지 렌더링
-│   ├─ js/project.js       ← 상세 페이지 렌더링 + 라이트박스
-│   └─ projects/<slug>/    ← 프로젝트별 사진 (README.md 참고)
-├─ .claude/launch.json     ← dev 서버 (포트 5220)
-├─ serve.json              ← 로컬 서버 설정. cleanUrls 끄는 용도 (아래 참고)
-└─ .nojekyll
+├─ index.html                 Vite 진입점 (메타 태그·폰트)
+├─ vite.config.ts             base: "/juyoung-page/" ← 바꾸면 주소가 깨집니다
+├─ tsconfig.json
+├─ .github/workflows/deploy.yml
+├─ public/
+│   ├─ .nojekyll
+│   ├─ 404.html               하위 경로 직접 접속 우회 (아래 참고)
+│   └─ projects/<slug>/       프로젝트 사진
+└─ src/
+    ├─ main.tsx               주소 정리 후 렌더링
+    ├─ App.tsx                라우팅
+    ├─ types.ts               데이터 형태 정의
+    ├─ data/
+    │   ├─ profile.ts         이름·연락처·경력·강점·스킬·학력
+    │   └─ projects.ts        ★ 프로젝트 30건 + CATEGORY_ORDER
+    ├─ lib/
+    │   ├─ media.ts           유튜브 파싱 · 이미지 경로
+    │   └─ projects.ts        정렬 · 분류 목록
+    ├─ hooks/useReveal.ts     스크롤 등장 · 문서 제목
+    ├─ components/            Header Footer Hero About ProjectList
+    │                         ProjectCard VideoCarousel Gallery
+    ├─ pages/                 Home ProjectDetail NotFound
+    └─ styles/style.css       색은 :root 변수만 고치면 전체 반영
 ```
 
-## ⚠️ 하위 경로 배포라서 지켜야 할 것
+## ⚠️ 반드시 지킬 것
 
-루트가 아니라 `/juyoung-page/` 아래에서 열립니다.
-**절대 경로(`/`로 시작)를 쓰면 배포본에서 전부 깨집니다.**
+**1. `vite.config.ts` 의 `base` 를 건드리지 마세요.**
+`/juyoung-page/` 하위 경로 배포라서, 이 값이 틀리면 CSS·JS·이미지가 전부 404 납니다.
+이미지 경로는 `import.meta.env.BASE_URL` 을 쓰는 `imageSrc()` 로만 만드세요.
 
-```html
-<!-- ❌ 로컬에선 되지만 GitHub Pages에서 404 -->
-<img src="/assets/x.jpg">
-<!-- ✅ 상대 경로만 -->
-<img src="assets/x.jpg">
-```
+**2. `public/404.html` 을 지우지 마세요.**
+GitHub Pages 는 `/project/xxx` 같은 주소를 모릅니다. 이 파일이 원래 경로를 `?redirect=` 로
+넘겨주고 `src/main.tsx` 가 되돌립니다. 없으면 새로고침·직접 접속이 전부 깨집니다.
 
-## ⚠️ serve.json 을 지우지 마세요
+**3. `.nojekyll` 도 지우지 마세요.** `_` 로 시작하는 파일이 무시되는 걸 막습니다.
 
-로컬 dev 서버(`npx serve`)는 기본값으로 `project.html` → `project` 로 리다이렉트하면서
-**쿼리스트링(`?id=...`)을 날려버립니다.** 그러면 상세 페이지가 "찾을 수 없음"으로 뜹니다.
-GitHub Pages는 이런 변환을 하지 않으므로, 로컬 환경을 배포 환경과 맞추기 위해
-`serve.json` 에서 `cleanUrls: false` 로 꺼둔 상태입니다.
+**4. 파일명 대소문자를 정확히.** Windows 로컬은 무시하지만 GitHub 서버는 구분합니다.
 
-## 그 외 규칙
+**5. Skills 목록은 첫 화면(Hero)에만 둡니다.** About 에 Skills 카드를 다시 만들지 마세요.
+같은 태그 20개가 한 페이지에 두 번 나옵니다. About 은 Career + Strengths + Education.
 
-- **파일명 대소문자를 정확히** — Windows 로컬은 무시하지만 GitHub 서버는 구분합니다
-- **빌드 도구 없음** — 순수 HTML/CSS/JS. `<script src>` 로 데이터를 읽으므로 `fetch` 가 아니라
-  로컬 파일(file://)로 열어도 동작합니다
-- `.nojekyll` 지우지 말 것 — `_` 로 시작하는 폴더가 무시되는 걸 막습니다
-- 텍스트는 전부 `App.esc()` 로 이스케이프해서 출력합니다. `R&D`, `HTML & CSS` 같은
-  글자가 깨지지 않게 하려는 것이니, 새 렌더링 코드를 추가할 때도 반드시 통과시키세요
-- 전화번호는 `profile.js` 의 `showPhone: false` 로 **숨김 상태**입니다.
-  공개 페이지라 스팸 수집 위험이 있어 기본값을 꺼둔 것 — 켜려면 본인 판단으로 `true`
-- **Skills 목록은 첫 화면(hero)에만 둡니다.** About 섹션에 Skills 카드를 다시 만들지 마세요.
-  같은 20개 태그가 한 페이지에 두 번 나오게 됩니다. About 은 Career + Strengths 만.
+**6. `src/data/` 에 개인정보를 넣지 마세요.** 이 저장소는 public 입니다.
+`showPhone: false` 는 화면에 안 그린다는 뜻일 뿐, 공개되지 않는다는 뜻이 아닙니다.
 
 ## 톤
 
 따뜻한 아이보리 / 브라운 저채도. 순백·순검정을 쓰지 않습니다.
 다크 모드도 차가운 회색이 아니라 따뜻한 다크 브라운.
-인터랙션은 절제 — 스크롤 페이드업, 카드 호버, 이미지 라이트박스 정도.
+인터랙션은 절제 — 스크롤 페이드업, 카드 호버, 라이트박스, 영상 넘기기 정도.
 스크롤 가로채기나 상시 애니메이션은 넣지 않습니다. `prefers-reduced-motion` 존중.

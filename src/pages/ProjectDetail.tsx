@@ -64,6 +64,11 @@ export default function ProjectDetail() {
             </Link>
             <h1>{project.title}</h1>
             <div className="detail-meta">
+              {project.categories?.map((c) => (
+                <span className="pc-category" key={c}>
+                  {c}
+                </span>
+              ))}
               <span>{project.company}</span>
               <span className="sep">|</span>
               <span>{project.period}</span>

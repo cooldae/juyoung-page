@@ -1,4 +1,4 @@
-import { PROJECTS } from "../data/projects";
+import { CATEGORY_ORDER, PROJECTS } from "../data/projects";
 import type { Project } from "../types";
 
 /** start 내림차순. 값이 같으면 data/projects.ts 에 적힌 순서를 따릅니다.
@@ -17,8 +17,21 @@ export function findProject(slug: string | undefined) {
   };
 }
 
-/** 회사 목록 (필터 버튼용) */
-export const companies: string[] = [
+/** 분류 목록 (필터 버튼용). 프로젝트가 많은 분류부터 나옵니다.
+ *  새 분류를 쓰면 버튼이 알아서 생깁니다. */
+const counts = new Map<string, number>();
+for (const p of sortedProjects) {
+  for (const c of p.categories ?? []) {
+    counts.set(c, (counts.get(c) ?? 0) + 1);
+  }
+}
+
+export const categories: string[] = [
   "전체",
-  ...Array.from(new Set(sortedProjects.map((p) => p.company).filter(Boolean))),
+  // CATEGORY_ORDER 에 적힌 순서대로. 실제로 쓰이는 것만 버튼이 생깁니다.
+  ...CATEGORY_ORDER.filter((c) => counts.has(c)),
+  // 목록에 없는 새 분류는 뒤에 붙입니다.
+  ...[...counts.keys()].filter((c) => !CATEGORY_ORDER.includes(c)).sort(),
 ];
+
+export const categoryCounts = counts;

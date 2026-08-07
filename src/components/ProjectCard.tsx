@@ -10,6 +10,7 @@ export function ProjectCard({ project }: { project: Project }) {
   return (
     <Link className="project-card reveal" to={`/project/${project.slug}`}>
       <div className="pc-top">
+        {project.categories?.[0] && <span className="pc-category">{project.categories[0]}</span>}
         <span className="pc-company">{project.company}</span>
         {project.status && <span className="badge">{project.status}</span>}
       </div>

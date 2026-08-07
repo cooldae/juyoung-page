@@ -54,6 +54,9 @@ export type Project = {
   slug: string;
   title: string;
   company: string;
+  /** 분류. 첫 번째가 대표 분류로 카드에 표시됩니다.
+   *  여러 개 적으면 어느 것으로 걸러도 나옵니다. */
+  categories: string[];
   /** 화면에 그대로 표시되는 기간 문구 */
   period: string;
   /** 정렬용 "YYYY-MM". 최신이 위로. 같으면 파일에 적힌 순서 */

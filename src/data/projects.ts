@@ -10,7 +10,13 @@ import type { Project } from "../types";
      slug      : 주소에 쓰이는 영문 이름. 다른 프로젝트와 겹치면 안 됩니다.
                  → project.html?id=<slug>
      title     : 프로젝트명
-     company   : 소속 (profile.js 의 careers 회사명과 같게 쓰면 필터가 묶입니다)
+     company   : 소속 (profile.ts 의 careers 회사명과 같게 쓰세요)
+     categories: 분류. 필터 버튼이 이 값에서 만들어집니다.
+                 첫 번째가 대표 분류로 카드에 표시됩니다.
+                 여러 개 적으면 어느 것으로 걸러도 나옵니다.
+                   categories: ["게임", "드로잉 · 미디어아트"],
+                 현재 쓰는 분류 (새 이름을 쓰면 버튼이 자동으로 생깁니다)
+                   게임 / 전시 인터랙션 / AR · VR · IoT / 드로잉 · 미디어아트 / 앱 · 웹
      period    : 화면에 그대로 표시되는 기간 문구
      start     : 정렬용 키 "YYYY-MM". 최신이 위로 옵니다.
                  같은 값이면 이 파일에 적힌 순서를 따릅니다.
@@ -41,11 +47,22 @@ import type { Project } from "../types";
                    ],
    ============================================================ */
 
+/** 필터 버튼이 나오는 순서입니다. 줄 순서만 바꾸면 화면에도 그대로 반영됩니다.
+ *  여기 없는 분류를 프로젝트에 쓰면 버튼이 맨 뒤에 자동으로 생깁니다. */
+export const CATEGORY_ORDER = [
+  "게임",
+  "전시 인터랙션",
+  "드로잉 · 미디어아트",
+  "AR · VR · IoT",
+  "앱 · 웹",
+];
+
 export const PROJECTS: Project[] = [
   {
     slug: "socket-racing",
     title: "소켓통신 모바일 게임 개발 – 레이싱",
     company: "집쇼코리아(주)",
+    categories: ["게임"],
     period: "2026",
     start: "2026-01",
     status: "진행 중",
@@ -68,6 +85,7 @@ export const PROJECTS: Project[] = [
     slug: "socket-zombie-shooting",
     title: "소켓통신 모바일 게임 개발 – 좀비 슈팅",
     company: "집쇼코리아(주)",
+    categories: ["게임"],
     period: "2026",
     start: "2026-01",
     status: "진행 중",
@@ -90,6 +108,7 @@ export const PROJECTS: Project[] = [
     slug: "gangneung-dart-game",
     title: "강릉 메타버스체험관 소켓 통신 다트 게임 개발",
     company: "집쇼코리아(주)",
+    categories: ["게임"],
     period: "2026",
     start: "2026-01",
     overview:
@@ -111,6 +130,7 @@ export const PROJECTS: Project[] = [
     slug: "color2life-alphabet",
     title: "컬러투라이프 알파벳 어드벤처 버전 개발",
     company: "집쇼코리아(주)",
+    categories: ["게임", "드로잉 · 미디어아트"],
     period: "2026",
     start: "2026-01",
     overview:
@@ -134,6 +154,7 @@ export const PROJECTS: Project[] = [
     slug: "royal-cuisine-minigame",
     title: "국가유산진흥원 궁중음식 미니게임 태블릿 앱 개발",
     company: "집쇼코리아(주)",
+    categories: ["게임", "앱 · 웹"],
     period: "2026",
     start: "2026-01",
     overview:
@@ -154,6 +175,7 @@ export const PROJECTS: Project[] = [
     slug: "jeju-dokdo-center",
     title: "제주도 독도 체험관 인터랙션 콘텐츠 개발",
     company: "집쇼코리아(주)",
+    categories: ["전시 인터랙션"],
     period: "2026",
     start: "2026-01",
     overview:
@@ -173,6 +195,7 @@ export const PROJECTS: Project[] = [
     slug: "busan-maritime-museum",
     title: "부산 국립해양박물관 인터랙션 콘텐츠 개발",
     company: "집쇼코리아(주)",
+    categories: ["전시 인터랙션"],
     period: "2026",
     start: "2026-01",
     overview:
@@ -192,6 +215,7 @@ export const PROJECTS: Project[] = [
     slug: "color2life-gangneung",
     title: "컬러투라이프 강릉 콘텐츠 개발",
     company: "집쇼코리아(주)",
+    categories: ["게임", "드로잉 · 미디어아트"],
     period: "2026",
     start: "2026-01",
     overview:
@@ -214,6 +238,7 @@ export const PROJECTS: Project[] = [
     slug: "color2life-haman",
     title: "컬러투라이프 함안 콘텐츠 개발",
     company: "집쇼코리아(주)",
+    categories: ["게임", "드로잉 · 미디어아트"],
     period: "2026",
     start: "2026-01",
     overview:
@@ -235,6 +260,7 @@ export const PROJECTS: Project[] = [
     slug: "ai-live-drawing",
     title: "AI 라이브 드로잉 콘텐츠 개발",
     company: "집쇼코리아(주)",
+    categories: ["드로잉 · 미디어아트"],
     period: "2026.01.10 ~ 2026.03.01",
     start: "2026-01",
     overview:
@@ -256,6 +282,7 @@ export const PROJECTS: Project[] = [
     slug: "jeju-vr-app",
     title: "국가유산진흥원 「한눈에 보는 제주도」 VR 앱 개발",
     company: "집쇼코리아(주)",
+    categories: ["AR · VR · IoT"],
     period: "2025.11.24 ~ 2025.12.18",
     start: "2025-11",
     overview:
@@ -276,6 +303,7 @@ export const PROJECTS: Project[] = [
     slug: "jeju-tablet-app",
     title: "국가유산진흥원 「한눈에 보는 제주도」 태블릿 앱 개발",
     company: "집쇼코리아(주)",
+    categories: ["앱 · 웹", "AR · VR · IoT"],
     period: "2025.08.31 ~ 2025.11.26",
     start: "2025-08",
     overview:
@@ -298,6 +326,7 @@ export const PROJECTS: Project[] = [
     slug: "windows-video-player",
     title: "Windows Video Player 개발",
     company: "집쇼코리아(주)",
+    categories: ["앱 · 웹"],
     period: "2025.07.25 ~ 2025.08.15",
     start: "2025-07",
     overview:
@@ -316,6 +345,7 @@ export const PROJECTS: Project[] = [
     slug: "pado-art-museum",
     title: "파타야 Pado Art Museum 인터랙션 콘텐츠 개발 및 출장 납품",
     company: "집쇼코리아(주)",
+    categories: ["전시 인터랙션"],
     period: "2025.04.03 ~ 2025.08.20",
     start: "2025-04",
     overview:
@@ -363,6 +393,7 @@ export const PROJECTS: Project[] = [
     slug: "ces-ai-media-art",
     title: "CES 참가용 앱 개발 – AI Media Art Kiosk-PC AI 영상 플레이",
     company: "집쇼코리아(주)",
+    categories: ["드로잉 · 미디어아트"],
     period: "~ 2025.01.07",
     start: "2025-01",
     overview:
@@ -381,6 +412,7 @@ export const PROJECTS: Project[] = [
     slug: "ces-3d-livesketch",
     title: "CES 참가용 앱 개발 – 3D 라이브 스케치 (컬러투라이프 명칭 전환)",
     company: "집쇼코리아(주)",
+    categories: ["게임", "드로잉 · 미디어아트"],
     period: "~ 2025.01.07",
     start: "2025-01",
     overview:
@@ -403,6 +435,7 @@ export const PROJECTS: Project[] = [
     slug: "livesketch-tablet-3d",
     title: "라이브스케치 태블릿 3D 버전 연구 개발",
     company: "집쇼코리아(주)",
+    categories: ["드로잉 · 미디어아트"],
     period: "2024.10.15 ~ 2024.12.23",
     start: "2024-10",
     overview:
@@ -422,6 +455,7 @@ export const PROJECTS: Project[] = [
     slug: "livesketch-tablet-2d",
     title: "라이브스케치 태블릿 2D 버전 연구 개발",
     company: "집쇼코리아(주)",
+    categories: ["드로잉 · 미디어아트"],
     period: "2024.10.03 ~ 2024.11.15",
     start: "2024-10",
     overview:
@@ -441,6 +475,7 @@ export const PROJECTS: Project[] = [
     slug: "livesketch-car",
     title: "라이브스케치 자동차 버전 개발",
     company: "집쇼코리아(주)",
+    categories: ["드로잉 · 미디어아트"],
     period: "2024.09.22 ~ 2024.10.12",
     start: "2024-09",
     overview:
@@ -459,6 +494,7 @@ export const PROJECTS: Project[] = [
     slug: "sorae-interactive",
     title: "소래역사관 인터랙티브 콘텐츠 개발",
     company: "집쇼코리아(주)",
+    categories: ["전시 인터랙션", "드로잉 · 미디어아트"],
     period: "2024.07.24 ~ 2024.09.25",
     start: "2024-07",
     overview:
@@ -477,6 +513,7 @@ export const PROJECTS: Project[] = [
     slug: "dmz-ar-photozone",
     title: "DMZ AR 포토존 기능 개선",
     company: "집쇼코리아(주)",
+    categories: ["전시 인터랙션", "AR · VR · IoT"],
     period: "2024.07.17 ~ 2024.07.31",
     start: "2024-07",
     overview:
@@ -495,6 +532,7 @@ export const PROJECTS: Project[] = [
     slug: "dmz-ar-telescope",
     title: "DMZ 강화평화전망대 AR 전망경 기능 개선",
     company: "집쇼코리아(주)",
+    categories: ["전시 인터랙션", "AR · VR · IoT"],
     period: "2024.07.15 ~ 2024.08.14",
     start: "2024-07",
     overview:
@@ -516,6 +554,7 @@ export const PROJECTS: Project[] = [
     slug: "world-script-museum-ar",
     title: "국립세계문자박물관 AR 도슨트",
     company: "집쇼코리아(주)",
+    categories: ["AR · VR · IoT"],
     period: "2024.06.13 ~ 2024.07.23",
     start: "2024-06",
     overview:
@@ -533,6 +572,7 @@ export const PROJECTS: Project[] = [
     slug: "chungnam-ar-navigation",
     title: "충남도청 AR 내비게이션",
     company: "집쇼코리아(주)",
+    categories: ["AR · VR · IoT"],
     period: "2024.04.29 ~ 2024.07.15",
     start: "2024-04",
     overview:
@@ -550,6 +590,7 @@ export const PROJECTS: Project[] = [
     slug: "parking-sensor-protocol",
     title: "자체 야외 주차 센서 통신 프로토콜 R&D 및 현장 설치 참여",
     company: "인터보이드(주)",
+    categories: ["AR · VR · IoT"],
     period: "2022 ~ 2023",
     start: "2022-01",
     overview:
@@ -571,6 +612,7 @@ export const PROJECTS: Project[] = [
     slug: "smart-device-system",
     title: "스마트 디바이스 연동 시스템 R&D 개발 참여",
     company: "인터보이드(주)",
+    categories: ["AR · VR · IoT"],
     period: "2022 ~ 2024",
     start: "2022-01",
     overview:
@@ -592,6 +634,7 @@ export const PROJECTS: Project[] = [
     slug: "museum-ar-content",
     title: "박물관 AR 콘텐츠 개발 및 납품 참여",
     company: "인터보이드(주)",
+    categories: ["AR · VR · IoT"],
     period: "2022 ~ 2024",
     start: "2022-01",
     overview:
@@ -611,6 +654,7 @@ export const PROJECTS: Project[] = [
     slug: "braille-kiosk",
     title: "지역 센터용 점자 교육 키오스크 개발 참여",
     company: "인터보이드(주)",
+    categories: ["앱 · 웹"],
     period: "2022 ~ 2024",
     start: "2022-01",
     overview:
@@ -630,6 +674,7 @@ export const PROJECTS: Project[] = [
     slug: "braille-web-platform",
     title: "점자 교육 웹 플랫폼 개발 참여",
     company: "인터보이드(주)",
+    categories: ["앱 · 웹"],
     period: "2022 ~ 2024",
     start: "2022-01",
     overview:
@@ -650,6 +695,7 @@ export const PROJECTS: Project[] = [
     slug: "braille-pad-emulator",
     title: "점자 패드 학습용 Unity 에뮬레이터 개발 참여",
     company: "인터보이드(주)",
+    categories: ["앱 · 웹"],
     period: "2022 ~ 2024",
     start: "2022-01",
     overview:

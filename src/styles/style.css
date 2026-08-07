@@ -428,6 +428,17 @@ a:hover { color: var(--accent); }
   margin-bottom: 0.75rem;
 }
 
+.pc-category {
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  font-weight: 600;
+  color: var(--accent-deep);
+  padding: 2px 9px;
+  border-radius: 6px;
+  background: var(--accent-wash);
+  white-space: nowrap;
+}
+
 .pc-company {
   font-size: 0.72rem;
   letter-spacing: 0.08em;

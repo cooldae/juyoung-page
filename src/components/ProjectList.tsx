@@ -1,14 +1,22 @@
 import { useMemo, useState } from "react";
 import { ProjectCard } from "./ProjectCard";
-import { companies, sortedProjects } from "../lib/projects";
+import { categories, sortedProjects } from "../lib/projects";
 import { useReveal } from "../hooks/useReveal";
 import type { Project } from "../types";
 
-function matches(p: Project, company: string, query: string) {
-  if (company !== "전체" && p.company !== company) return false;
+function matches(p: Project, category: string, query: string) {
+  if (category !== "전체" && !p.categories?.includes(category)) return false;
   if (!query) return true;
 
-  const haystack = [p.title, p.company, p.period, p.overview, p.stack.join(" "), p.work.join(" ")]
+  const haystack = [
+    p.title,
+    p.company,
+    p.period,
+    p.overview,
+    p.categories?.join(" ") ?? "",
+    p.stack.join(" "),
+    p.work.join(" "),
+  ]
     .join(" ")
     .toLowerCase();
 
@@ -16,15 +24,15 @@ function matches(p: Project, company: string, query: string) {
 }
 
 export function ProjectList() {
-  const [company, setCompany] = useState("전체");
+  const [category, setCategory] = useState("전체");
   const [query, setQuery] = useState("");
 
   const shown = useMemo(
-    () => sortedProjects.filter((p) => matches(p, company, query)),
-    [company, query]
+    () => sortedProjects.filter((p) => matches(p, category, query)),
+    [category, query]
   );
 
-  useReveal([company, query]);
+  useReveal([category, query]);
 
   const count =
     shown.length === sortedProjects.length
@@ -41,13 +49,13 @@ export function ProjectList() {
 
         <div className="filters reveal">
           <div className="filter-group">
-            {companies.map((name) => (
+            {categories.map((name) => (
               <button
                 type="button"
                 key={name}
                 className="filter-btn"
-                aria-pressed={name === company}
-                onClick={() => setCompany(name)}
+                aria-pressed={name === category}
+                onClick={() => setCategory(name)}
               >
                 {name}
               </button>
