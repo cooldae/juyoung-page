@@ -194,7 +194,10 @@ export const PROJECTS: Project[] = [
       "전시 환경에 맞춘 센서 인식 범위 보정 및 콘텐츠 동작 안정화 구현",
     ],
     images: ["project_jeju-dokdo-center_1.jpg", "project_jeju-dokdo-center_2.jpg", "project_jeju-dokdo-center_3.jpg"],
-    youtube: "",
+    youtube: [
+      // project_jeju-dokdo-center_1.mp4
+      "https://youtu.be/D0oqTtdqV80",
+    ],
   },
 
   {
@@ -214,7 +217,10 @@ export const PROJECTS: Project[] = [
       "다중 리더기 입력 처리 및 콘텐츠 반응 제어 구현",
     ],
     images: [],
-    youtube: "",
+    youtube: [
+      // project_busan-maritime-museum_1.mp4
+      "https://youtu.be/nSMeOHIJk5o",
+    ],
   },
 
   {
@@ -259,7 +265,10 @@ export const PROJECTS: Project[] = [
       "다중 사용자 접속 및 플레이 데이터 처리 구현",
     ],
     images: ["project_color2life-haman_1.jpg"],
-    youtube: "",
+    youtube: [
+      // project_color2life-haman_1.mp4
+      "https://youtu.be/bKL4vcDM7CA",
+    ],
   },
 
   {
@@ -326,7 +335,12 @@ export const PROJECTS: Project[] = [
       "AR모드 내 지역별 3D 모델 표시 및 음성 해설 연동 구현",
     ],
     images: ["project_jeju-tablet-app_1.jpg", "project_jeju-tablet-app_2.jpg", "project_jeju-tablet-app_3.jpg", "project_jeju-tablet-app_4.jpg"],
-    youtube: "",
+    youtube: [
+      // project_jeju-tablet-app_1.mp4
+      { url: "https://youtu.be/wREVoiT9vx8", label: "스토리모드 디지털북" },
+      // project_jeju-tablet-app_2.mp4
+      { url: "https://youtu.be/All94h3Te9I", label: "AR 모드" },
+    ],
   },
 
   {
@@ -413,7 +427,12 @@ export const PROJECTS: Project[] = [
       "Socket 통신 기반 키오스크와 영상 출력 PC 간 데이터 연동 구현",
     ],
     images: [],
-    youtube: "",
+    youtube: [
+      // project_ces-ai-media-art_1.mp4
+      { url: "https://youtu.be/n2tZFngKzzE", label: "키오스크" },
+      // project_ces-ai-media-art_2.mp4
+      { url: "https://youtu.be/63pJiLN8beg", label: "미디어월 PC" },
+    ],
   },
 
   {
@@ -592,7 +611,10 @@ export const PROJECTS: Project[] = [
       "현재 위치와 목적지를 기준으로 AR 내비게이션 안내 기능 구현",
     ],
     images: ["project_chungnam-ar-navigation_1.jpg", "project_chungnam-ar-navigation_2.jpg", "project_chungnam-ar-navigation_3.jpg", "project_chungnam-ar-navigation_4.jpg"],
-    youtube: "",
+    youtube: [
+      // project_chungnam-ar-navigation_2.mp4
+      "https://youtu.be/2mGeEPEjccQ",
+    ],
   },
 
   {
@@ -615,7 +637,12 @@ export const PROJECTS: Project[] = [
       "약 3,000대 규모 야외 주차 센서 설치 및 현장 통신 테스트 참여",
     ],
     images: ["project_parking-sensor-protocol_1.jpg", "project_parking-sensor-protocol_2.jpg"],
-    youtube: "",
+    youtube: [
+      // project_parking-sensor-protocol_1.mp4
+      "https://youtu.be/KLylGLy9KsM",
+      // project_parking-sensor-protocol_2.mp4
+      "https://youtu.be/Cu6PXfOLL0U",
+    ],
   },
 
   {

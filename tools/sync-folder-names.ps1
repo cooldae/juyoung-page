@@ -69,7 +69,12 @@ $MAP = @{
 }
 
 $IMG_UP = "사진 업로드"; $IMG_NOUP = "사진 미업로드"; $IMG_ORIG = "사진 원본"
-$VID_UP = "영상 업로드"; $VID_NOUP = "영상 미업로드"; $VID_OLD = "영상"
+
+# 영상은 3단계 — 아직 안 올림 / 유튜브에만 올림 / 페이지에도 넣음
+$VID_NOUP = "영상 미업로드"
+$VID_YT   = "유튜브 업로드 완료"
+$VID_PAGE = "페이지 업로드 완료"
+$VID_OLD  = @("영상", "영상 업로드")   # 예전 이름들
 
 $IMG_EXT = '^\.(png|jpg|jpeg|webp)$'
 $VID_EXT = '^\.(mp4|mov|avi|mkv|m4v|webm)$'
@@ -149,7 +154,21 @@ function Optimize-Image([string]$in, [string]$out) {
 }
 
 function Get-BaseName([string]$name) {
-  return ($name -replace '\s*\[\d+,\s*\d+,\s*\d+\]\s*$', '')
+  # 이름 끝의 " [숫자, 숫자, ...]" 만 떼어냅니다. 기존 " [2]" 같은 표시는 남깁니다.
+  return ($name -replace '\s*\[\d+(?:,\s*\d+)+\]\s*$', '')
+}
+
+# 데이터 파일의 주석에서 "페이지에 올라간 영상 파일" 목록을 읽습니다.
+#   youtube: [
+#     // project_pado-art-museum_3.mp4     ← 이 줄
+#     { url: "...", label: "..." },
+function Get-OnPageVideos([string]$dataFile) {
+  $set = New-Object 'System.Collections.Generic.HashSet[string]'
+  if (-not (Test-Path -LiteralPath $dataFile)) { return $set }
+  foreach ($m in [regex]::Matches((Get-Content -LiteralPath $dataFile -Raw), '//\s*(project_[\w\-]+_\d+\.\w+)')) {
+    [void]$set.Add($m.Groups[1].Value)
+  }
+  return $set
 }
 
 function Ensure-Dir([string]$p) {
@@ -175,6 +194,11 @@ function Next-Index([string]$slug, [string[]]$dirs) {
 
 if (-not (Test-Path -LiteralPath $Root)) { throw "폴더가 없습니다: $Root" }
 
+# 페이지에 링크가 들어간 영상 파일 목록
+$dataFile = Join-Path (Split-Path (Split-Path $Site -Parent) -Parent) "src\data\projects.ts"
+$onPage = Get-OnPageVideos $dataFile
+"데이터 파일에서 페이지 등록 영상 $($onPage.Count) 개 확인"
+
 $rows = @()
 $unmapped = @()
 
@@ -186,17 +210,20 @@ foreach ($d in (Get-ChildItem -LiteralPath $Root -Directory | Sort-Object Name))
   if (-not $slug) { $unmapped += $base; continue }
 
   $dir = $d.FullName
-  foreach ($s in @($IMG_UP, $IMG_NOUP, $IMG_ORIG, $VID_UP, $VID_NOUP)) { Ensure-Dir (Join-Path $dir $s) }
+  foreach ($s in @($IMG_UP, $IMG_NOUP, $IMG_ORIG, $VID_NOUP, $VID_YT, $VID_PAGE)) { Ensure-Dir (Join-Path $dir $s) }
 
   $pUp = Join-Path $dir $IMG_UP; $pOrig = Join-Path $dir $IMG_ORIG
-  $vUp = Join-Path $dir $VID_UP; $vNo = Join-Path $dir $VID_NOUP
+  $vNo = Join-Path $dir $VID_NOUP; $vYt = Join-Path $dir $VID_YT; $vPg = Join-Path $dir $VID_PAGE
 
-  # 1) 예전 [영상] 폴더 흡수
-  $old = Join-Path $dir $VID_OLD
-  if (Test-Path -LiteralPath $old) {
+  # 1) 예전 폴더 이름 흡수
+  #    [영상] 은 아직 안 올린 것, [영상 업로드] 는 이미 페이지에 넣은 것이었습니다
+  foreach ($oldName in $VID_OLD) {
+    $old = Join-Path $dir $oldName
+    if (-not (Test-Path -LiteralPath $old)) { continue }
+    $target = if ($oldName -eq "영상 업로드") { $vPg } else { $vNo }
     foreach ($f in (Get-ChildItem -LiteralPath $old -File)) {
-      if (-not $WhatIf) { Move-Item -LiteralPath $f.FullName -Destination (Join-Path $vNo $f.Name) -Force }
-      "  [$base] '$VID_OLD' → '$VID_NOUP' : $($f.Name)"
+      if (-not $WhatIf) { Move-Item -LiteralPath $f.FullName -Destination (Join-Path $target $f.Name) -Force }
+      "  [$base] '$oldName' → '$(Split-Path $target -Leaf)' : $($f.Name)"
     }
     if (-not $WhatIf -and @(Get-ChildItem -LiteralPath $old -Force).Count -eq 0) { Remove-Item -LiteralPath $old -Force }
   }
@@ -222,14 +249,23 @@ foreach ($d in (Get-ChildItem -LiteralPath $Root -Directory | Sort-Object Name))
   }
 
   # 4) 번호가 안 붙은 영상 이름 정리 (이미 붙은 것은 그대로 둡니다)
-  $vNext = Next-Index $slug @($vUp, $vNo)
-  foreach ($dirV in @($vUp, $vNo)) {
+  $vNext = Next-Index $slug @($vNo, $vYt, $vPg)
+  foreach ($dirV in @($vNo, $vYt, $vPg)) {
     foreach ($f in (Files-In $dirV $VID_EXT)) {
       if ($f.Name -match ('^project_' + [regex]::Escape($slug) + '_\d+\.')) { continue }
       $newName = "project_{0}_{1}{2}" -f $slug, $vNext, $f.Extension.ToLower()
       if (-not $WhatIf) { Rename-Item -LiteralPath $f.FullName -NewName $newName }
       "  [$base] 영상 이름 : $($f.Name) → $newName"
       $vNext++
+    }
+  }
+
+  # 4-2) 데이터 파일에 링크가 들어간 영상은 [페이지 업로드 완료] 로 옮깁니다
+  foreach ($dirV in @($vNo, $vYt)) {
+    foreach ($f in (Files-In $dirV $VID_EXT)) {
+      if (-not $onPage.Contains($f.Name)) { continue }
+      if (-not $WhatIf) { Move-Item -LiteralPath $f.FullName -Destination (Join-Path $vPg $f.Name) -Force }
+      "  [$base] 페이지에 등록됨 → '$VID_PAGE' : $($f.Name)"
     }
   }
 
@@ -242,11 +278,13 @@ foreach ($d in (Get-ChildItem -LiteralPath $Root -Directory | Sort-Object Name))
     foreach ($f in $imgs) { Copy-Item -LiteralPath $f.FullName -Destination (Join-Path $siteDir $f.Name) -Force }
   }
 
-  $imgUp = $imgs.Count
-  $vidUp = (Files-In $vUp $VID_EXT).Count
-  $vidNo = (Files-In $vNo $VID_EXT).Count
+  $imgUp  = $imgs.Count
+  $vidPg  = (Files-In $vPg $VID_EXT).Count
+  $vidYt  = (Files-In $vYt $VID_EXT).Count
+  $vidNo  = (Files-In $vNo $VID_EXT).Count
 
-  $newFolder = "{0} [{1}, {2}, {3}]" -f $base, $imgUp, $vidUp, $vidNo
+  # [이미지, 페이지 완료, 유튜브만 완료, 미업로드]
+  $newFolder = "{0} [{1}, {2}, {3}, {4}]" -f $base, $imgUp, $vidPg, $vidYt, $vidNo
   if ($d.Name -ne $newFolder -and -not $WhatIf) {
     # 탐색기나 백신이 폴더를 잠깐 잡고 있으면 이름 변경이 거부됩니다. 몇 번 다시 시도합니다.
     $renamed = $false
@@ -266,13 +304,14 @@ foreach ($d in (Get-ChildItem -LiteralPath $Root -Directory | Sort-Object Name))
     }
   }
 
-  $rows += [pscustomobject]@{ 폴더 = $newFolder; 이미지 = $imgUp; 영상_업로드 = $vidUp; 영상_미업로드 = $vidNo }
+  $rows += [pscustomobject]@{ 폴더 = $newFolder; 이미지 = $imgUp; 페이지완료 = $vidPg; 유튜브만 = $vidYt; 미업로드 = $vidNo }
 }
 
 ""
 $rows | Format-Table -AutoSize
-"합계 — 이미지 {0}장 / 업로드된 영상 {1}개 / 미업로드 영상 {2}개" -f `
-  ($rows | Measure-Object 이미지 -Sum).Sum, ($rows | Measure-Object 영상_업로드 -Sum).Sum, ($rows | Measure-Object 영상_미업로드 -Sum).Sum
+"합계 — 이미지 {0}장 / 페이지 완료 {1}개 / 유튜브만 {2}개 / 미업로드 {3}개" -f `
+  ($rows | Measure-Object 이미지 -Sum).Sum, ($rows | Measure-Object 페이지완료 -Sum).Sum,
+  ($rows | Measure-Object 유튜브만 -Sum).Sum, ($rows | Measure-Object 미업로드 -Sum).Sum
 ""
 "손대지 않은 폴더: $($SKIP -join ', ')"
 if ($unmapped.Count) { "⚠ 매핑 없는 폴더 (이 스크립트 위쪽 `$MAP 에 추가하세요): $($unmapped -join ', ')" }
