@@ -9,6 +9,86 @@ const CHIP_STEP = 0.022;
 const WAVE_RADIUS = 130; // 커서 주변 몇 px 까지 글자가 반응할지
 const WAVE_LIFT = 15; // 가장 가까운 글자가 뜨는 높이 (px)
 
+const MAGNET_RADIUS = 120; // 커서 주변 몇 px 까지 기술 태그가 반응할지
+const MAGNET_PULL = 8; // 커서 쪽으로 끌려오는 최대 거리 (px)
+
+/** 커서 근처의 기술 태그가 커서 쪽으로 끌려오면서 살짝 떠오릅니다.
+ *
+ *  위치는 겉껍질(.chip-wrap)에서 재고 움직이는 건 안쪽(.chip)입니다.
+ *  움직인 요소에서 위치를 다시 재면 스스로를 쫓아가며 점점 밀려납니다. */
+function useMagneticChips(
+  rootRef: React.RefObject<HTMLElement | null>,
+  hostRef: React.RefObject<HTMLElement | null>,
+  count: number
+) {
+  useEffect(() => {
+    const root = rootRef.current;
+    const host = hostRef.current;
+    if (!root || !host) return;
+
+    const fine = window.matchMedia("(pointer: fine)").matches;
+    const calm = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!fine || calm) return;
+
+    const wraps = Array.from(root.querySelectorAll<HTMLElement>(".chip-wrap"));
+    let frame = 0;
+    let mx = 0;
+    let my = 0;
+
+    const apply = () => {
+      frame = 0;
+      for (const wrap of wraps) {
+        const chip = wrap.firstElementChild as HTMLElement | null;
+        if (!chip) continue;
+
+        const box = wrap.getBoundingClientRect();
+        const dx = mx - (box.left + box.width / 2);
+        const dy = my - (box.top + box.height / 2);
+        const dist = Math.hypot(dx, dy);
+
+        if (dist > MAGNET_RADIUS) {
+          chip.style.transform = "";
+          continue;
+        }
+
+        const falloff = (Math.cos((dist / MAGNET_RADIUS) * Math.PI) + 1) / 2;
+        const pull = MAGNET_PULL * falloff;
+        const nx = dist === 0 ? 0 : (dx / dist) * pull;
+        const ny = dist === 0 ? 0 : (dy / dist) * pull;
+
+        // 커서가 정확히 올라간 태그는 끌려갈 방향이 없으므로
+        // 떠오름과 확대가 그 자리를 대신합니다
+        chip.style.transform =
+          `translate(${nx}px, ${ny - 4 * falloff}px) scale(${1 + 0.09 * falloff})`;
+      }
+    };
+
+    const onMove = (e: MouseEvent) => {
+      mx = e.clientX;
+      my = e.clientY;
+      if (!frame) frame = requestAnimationFrame(apply);
+    };
+
+    const reset = () => {
+      if (frame) cancelAnimationFrame(frame);
+      frame = 0;
+      for (const wrap of wraps) {
+        const chip = wrap.firstElementChild as HTMLElement | null;
+        if (chip) chip.style.transform = "";
+      }
+    };
+
+    host.addEventListener("mousemove", onMove);
+    host.addEventListener("mouseleave", reset);
+
+    return () => {
+      host.removeEventListener("mousemove", onMove);
+      host.removeEventListener("mouseleave", reset);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, [rootRef, hostRef, count]);
+}
+
 /** 큰 글자 — 한 글자씩 등장하고, 커서가 지나가면 물결처럼 반응합니다.
  *  화면 낭독기에는 쪼개진 글자가 아니라 전체 문장으로 읽힙니다. */
 function Headline({ text }: { text: string }) {
@@ -90,7 +170,10 @@ export function Hero() {
   const p = PROFILE;
   const hostRef = useRef<HTMLElement | null>(null);
   const mainRef = useRef<HTMLDivElement | null>(null);
+  const skillsRef = useRef<HTMLDivElement | null>(null);
   const [scrolled, setScrolled] = useState(false);
+
+  useMagneticChips(skillsRef, hostRef, p.skills.length);
 
   // 스크롤하면 첫 화면이 살짝 느리게 따라오며 흐려집니다
   useEffect(() => {
@@ -155,14 +238,15 @@ export function Hero() {
             )}
 
             {p.skills.length > 0 && (
-              <div className="hero-skills chips">
+              <div className="hero-skills chips" ref={skillsRef}>
                 {p.skills.map((s, i) => (
+                  // 겉껍질이 등장 애니메이션을, 안쪽이 자석 움직임을 맡습니다
                   <span
-                    className="chip fade-up"
+                    className="chip-wrap fade-up"
                     style={{ animationDelay: `${skillsDelay + i * CHIP_STEP}s` }}
                     key={s}
                   >
-                    {s}
+                    <span className="chip">{s}</span>
                   </span>
                 ))}
               </div>

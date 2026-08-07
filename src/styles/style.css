@@ -356,9 +356,22 @@ a:hover { color: var(--accent); }
   max-width: 62ch;
   gap: 8px;
 }
+.hero-skills .chip-wrap {
+  display: inline-block;
+}
+
+/* 커서가 올라간 태그는 색으로도 반응합니다 */
+.hero-skills .chip-wrap:hover .chip {
+  background: color-mix(in srgb, var(--accent) 26%, var(--accent-wash));
+  color: var(--accent-deep);
+}
+
 .hero-skills .chip {
+  display: inline-block;
   font-size: 0.82rem;
   padding: 5px 13px;
+  will-change: transform;
+  transition: transform 0.2s var(--ease), background 0.2s var(--ease), color 0.2s var(--ease);
 }
 
 .hero-meta {
@@ -988,6 +1001,7 @@ a:hover { color: var(--accent); }
   .hero-glow { display: none; }
   .scroll-hint { opacity: 1; animation: none; }
   .scroll-hint-line { animation: none; transform: none; opacity: 1; }
+  .hero-skills .chip { transform: none !important; }
 }
 
 /* ---------- 인쇄 ---------- */
