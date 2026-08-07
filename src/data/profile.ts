@@ -8,8 +8,8 @@ export const PROFILE: Profile = {
   nameEn: "KIM JUYOUNG",
   nameKo: "김주영",
 
-  // 첫 화면 맨 위 작은 글씨
-  eyebrow: "김주영 · 포트폴리오",
+  // 첫 화면 맨 위 작은 글씨 — 무슨 일을 하는지 한 줄로
+  eyebrow: "전시 인터랙션 · 게임 · AR/VR 콘텐츠 개발",
 
   // 첫 화면 큰 글자. 글자 하나씩 차례로 나타납니다.
   // 너무 길면 등장이 늘어지니 20자 안쪽을 권합니다.

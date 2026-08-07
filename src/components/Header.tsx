@@ -18,10 +18,10 @@ export function Header() {
           KIM JUYOUNG
         </Link>
         <nav className="site-nav" aria-label="주요 메뉴">
+          <Link to="/#projects">Projects</Link>
           <Link to="/#about" data-optional="">
             About
           </Link>
-          <Link to="/#projects">Projects</Link>
           <Link to="/#footer">Contact</Link>
         </nav>
       </div>

@@ -27,8 +27,9 @@ export default function Home() {
   return (
     <main id="main">
       <Hero />
-      <About />
+      {/* 프로젝트가 이 사이트의 본론이라 About 보다 위에 둡니다 */}
       <ProjectList />
+      <About />
     </main>
   );
 }

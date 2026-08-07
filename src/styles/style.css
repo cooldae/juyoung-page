@@ -159,8 +159,10 @@ a:hover { color: var(--accent); }
   overflow: hidden;
   display: flex;
   align-items: center;
-  min-height: min(90svh, 800px);
-  padding: clamp(56px, 10vw, 110px) 0 clamp(64px, 9vw, 96px);
+  /* 100svh 를 채우지 않습니다. 아래 Projects 가 살짝 보여야
+     스크롤할 게 있다는 것이 바로 읽힙니다. */
+  min-height: min(74svh, 620px);
+  padding: clamp(32px, 5vw, 60px) 0 clamp(52px, 6vw, 72px);
 }
 
 .hero > .wrap {
@@ -273,9 +275,9 @@ a:hover { color: var(--accent); }
 
 /* 큰 글자 — 한 글자씩 등장 + 글자 개별 호버 */
 .headline {
-  font-size: clamp(2.4rem, 8.5vw, 5.2rem);
+  font-size: clamp(2rem, 6vw, 3.7rem);
   line-height: 1.1;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.03em;
   font-weight: 600;
 }
 

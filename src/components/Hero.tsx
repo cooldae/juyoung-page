@@ -6,8 +6,8 @@ import { HeroStats } from "./HeroStats";
 const CHAR_STEP = 0.04; // 글자 사이 등장 간격 (초)
 const CHIP_STEP = 0.022;
 
-const WAVE_RADIUS = 130; // 커서 주변 몇 px 까지 글자가 반응할지
-const WAVE_LIFT = 15; // 가장 가까운 글자가 뜨는 높이 (px)
+const WAVE_RADIUS = 105; // 커서 주변 몇 px 까지 글자가 반응할지
+const WAVE_LIFT = 11; // 가장 가까운 글자가 뜨는 높이 (px)
 
 const MAGNET_RADIUS = 120; // 커서 주변 몇 px 까지 기술 태그가 반응할지
 const MAGNET_PULL = 8; // 커서 쪽으로 끌려오는 최대 거리 (px)
