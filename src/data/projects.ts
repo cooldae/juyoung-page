@@ -59,6 +59,58 @@ export const CATEGORY_ORDER = [
 
 export const PROJECTS: Project[] = [
   {
+    slug: "hungry-cat-fishing",
+    featured: true,
+    title: "배고파서 낚시하는 고양이 — 웹 방치형 낚시 게임",
+    company: "개인 프로젝트",
+    categories: ["게임", "앱 · 웹"],
+    period: "2026",
+    start: "2026-02",
+    status: "운영 중",
+    overview:
+      "물고기 도감 150종을 모으는 웹 방치형 낚시 게임. 지역별 획득 확률과 낚싯대·미끼·바구니 업그레이드로 수집 루프를 설계하고, 자동 낚시·세이브 무결성 검증·다국어까지 직접 만들어 배포하고 운영 중인 개인 프로젝트",
+    stack: ["React", "Vite", "JavaScript", "Cloudflare Pages", "i18n", "Kakao AdFit", "SEO / OG"],
+    work: [
+      "물고기 도감 150종과 지역별 획득 확률 테이블 설계",
+      "재화·상점·낚싯대/미끼/바구니 업그레이드 등 게임 경제 설계",
+      "행운·가치 스탯이 획득 결과에 반영되는 구조 구현",
+      "자동 낚시 세션 로직 구현 (자동 릴 낚싯대 해금형)",
+      "체크섬 기반 세이브 데이터 무결성 검증 구현 — 저장값 변조 방지",
+      "개발용 치트 패널 및 토큰 인증 구현",
+      "다국어 지원 구현 (문자열 586개 × 2개 언어)",
+      "Cloudflare Pages 기반 자동 배포 파이프라인 구성 및 도메인 연결",
+      "OG 카드·검색 색인 등 SEO 작업 및 광고 연동",
+    ],
+    links: [{ label: "hungrycatfishing.com — 직접 플레이해 보실 수 있습니다", url: "https://hungrycatfishing.com/" }],
+    images: [],
+    youtube: "",
+  },
+
+  {
+    slug: "unbbal-lab",
+    title: "운빨실험실 — 운세 · 미니게임 웹 서비스",
+    company: "개인 프로젝트",
+    categories: ["앱 · 웹", "게임"],
+    period: "2026",
+    start: "2026-02",
+    status: "운영 중",
+    overview:
+      "운빨 측정, 오늘의 운세, 운빨 아케이드, 두뇌 벤치마크 네 개 섹션으로 구성된 엔터테인먼트 웹 서비스. 기획부터 개발·배포·검색 노출·광고 연동·운영까지 혼자 맡고 있는 개인 프로젝트",
+    stack: ["JavaScript", "Cloudflare Pages", "i18n", "Kakao AdFit", "Google Search Console", "SEO"],
+    work: [
+      "운빨 측정 · 오늘의 운세 · 운빨 아케이드 · 두뇌 벤치마크 4개 섹션 개발",
+      "다국어 지원 구현",
+      "Cloudflare Pages 자동 배포 구성 및 도메인 연결",
+      "구글 서치콘솔·네이버 검색 등록 및 색인 관리",
+      "광고 플랫폼 연동",
+      "개인정보처리방침 등 서비스 운영 문서 정비",
+    ],
+    links: [{ label: "unbbal.com — 직접 사용해 보실 수 있습니다", url: "https://unbbal.com/" }],
+    images: [],
+    youtube: "",
+  },
+
+  {
     slug: "socket-racing",
     title: "소켓통신 모바일 게임 개발 – 레이싱",
     company: "집쇼코리아(주)",
