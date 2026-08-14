@@ -46,9 +46,9 @@ export const PROFILE: Profile = {
   // 첫 화면에 태그 형태로 표시됩니다. 순서대로 나옵니다.
   skills: [
     "Unity", "C#", "Unreal Engine", "C++", "Python", "Kotlin", "Java",
-    "Vue", "Flask", "django", "MySQL", "Bootstrap 5", "HTML & CSS & JS",
+    "React", "Vue", "Flask", "django", "MySQL", "Bootstrap 5", "HTML & CSS & JS",
     "TouchDesigner", "Networking", "Android Studio", "Linux",
-    "Photoshop", "Figma", "Notion",
+    "Photoshop", "Figma",
   ],
 
   // 경력 (최신순). 프로젝트의 company 값과 이름이 같아야 필터가 묶입니다.
