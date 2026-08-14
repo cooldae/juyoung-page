@@ -111,6 +111,67 @@ export const PROJECTS: Project[] = [
   },
 
   {
+    slug: "hand-tracking-fortress",
+    title: "비전 기반 핸드트래킹 게임 개발 – 포트리스",
+    company: "집쇼코리아(주)",
+    categories: ["게임"],
+    period: "2026",
+    start: "2026-03",
+    status: "R&D",
+    overview:
+      "웹캠으로 인식한 손동작을 실시간으로 Unity에 전달하여, 별도 컨트롤러 없이 손 제스처만으로 조준·발사·이동·화면 확대를 수행하는 턴제 포격 게임 콘텐츠",
+    stack: [
+      "Unity Windows", "MediaPipe", "Python", "OpenCV", "UDP Socket 통신",
+      "Computer Vision", "Hand Landmark Detection", "Gesture Recognition",
+      "1€ Filter", "Procedural Terrain Generation", "Destructible Terrain",
+      "Ballistics Simulation", "Multi-User Interaction", "MCP(Model Context Protocol)",
+    ],
+    work: [
+      "Python·MediaPipe 기반 손 랜드마크 추출 서버 직접 개발",
+      "21개 랜드마크의 실시간 UDP 전송 프로토콜 설계 및 Unity 수신 구조 구현 (백그라운드 스레드 수신 + 메인 스레드 파싱)",
+      "1€ Filter 기반 좌표 떨림 보정 및 입력 지연 최소화 구현",
+      "이중 임계값·프레임 디바운스 기반 손 제스처 판정 로직 구현 (주먹·브이·손 기울기)",
+      "실측 데이터 기반 제스처 임계값 보정 도구 직접 개발",
+      "새총 방식 조준 인터랙션 구현 (잡기 → 당기기 → 놓기)",
+      "높이맵 기반 파괴 가능 지형 및 절차적 지형 생성 5종 구현",
+      "중력·바람·충돌 속도를 반영한 탄도 시뮬레이션 및 데미지 연출 구현",
+      "손 기울기 기반 차량 이동과 연료·등판각 제한 구현",
+      "턴제 게임 루프 및 다중 참여자 구조 구현",
+    ],
+    research: [
+      "실측 데이터 기반 제스처 신호 재설계 — 분포가 겹쳐 쓸 수 없던 지표를 분리 여유 0.77의 지표로 전환",
+      "필터 파라미터의 좌표계 의존성 규명 및 입력 지연 165ms 제거",
+      "2D 투영 측정의 구조적 결함 규명 및 3D 측정으로 환원",
+      "제스처 간 충돌 자동 검증 도구 개발",
+      "절차적 생성 맵의 플레이 가능성 자동 검증 로직 구현",
+    ],
+    images: [],
+    youtube: "",
+  },
+
+  {
+    slug: "museum-ai-qna",
+    title: "국립세계문자박물관 어린이체험관 AI 문답 콘텐츠 개발",
+    company: "집쇼코리아(주)",
+    categories: ["전시 인터랙션", "앱 · 웹"],
+    period: "2026",
+    start: "2026-03",
+    overview:
+      "어린이 관람객이 질문 유형을 선택하면 Gemini API를 통해 맞춤형 답변을 생성하고, 음성 답변과 카드 인쇄까지 연동되는 AI 문답 체험 콘텐츠",
+    stack: ["Unity", "Gemini API", "Whisper STT", "AI Response System", "Printer 연동", "콘텐츠 ID Mapping"],
+    work: [
+      "질문 유형 및 선택 ID 기반 Gemini API 요청 구조 구현",
+      "특정 ID 값에 대응되는 답변을 정해진 콘텐츠 범위 내에서 출력하는 AI 응답 로직 구현",
+      "Whisper 모델 기반 STT 음성 입력 기능 구현",
+      "생성된 답변을 카드 형태로 출력하기 위한 인쇄기 연동 구현",
+      "어린이 체험 환경에 맞춘 질문 선택·답변 생성·음성 입력·카드 출력 흐름 구현",
+    ],
+    note: "공공기관 프로젝트",
+    images: [],
+    youtube: "",
+  },
+
+  {
     slug: "socket-racing",
     title: "소켓통신 모바일 게임 개발 – 레이싱",
     company: "집쇼코리아(주)",

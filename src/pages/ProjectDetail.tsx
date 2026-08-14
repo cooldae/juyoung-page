@@ -123,6 +123,16 @@ export default function ProjectDetail() {
               </Block>
             )}
 
+            {project.research && project.research.length > 0 && (
+              <Block title="문제 해결 · 검증">
+                <ul className="bullets">
+                  {project.research.map((r) => (
+                    <li key={r}>{r}</li>
+                  ))}
+                </ul>
+              </Block>
+            )}
+
             {project.details && project.details.length > 0 && (
               <Block title="상세 구현 내용">
                 <div className="detail-sub">

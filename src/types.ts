@@ -76,6 +76,9 @@ export type Project = {
   overview: string;
   stack: string[];
   work: string[];
+  /** 문제를 어떻게 풀었는지 (R&D). 담당 업무와 성격이 달라 따로 둡니다.
+   *  "무엇을 만들었다" 가 아니라 "무엇이 안 되던 걸 어떻게 되게 했다" 를 적으세요. */
+  research?: string[];
   details?: DetailBlock[];
   achievement?: string;
   note?: string;
