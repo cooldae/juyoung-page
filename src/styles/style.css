@@ -1101,150 +1101,100 @@ a:hover { color: var(--accent); }
 }
 
 /* ============================================================
-   기술 지도 (/skills) — 개인 확인용
+   기술 지도 (/skills) — 노드 지도. 개인 참고용
    ============================================================ */
 
-.skill-summary {
-  display: grid;
-  gap: 10px;
-  margin-bottom: clamp(24px, 4vw, 36px);
+.skillmap-shell {
+  width: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 0 clamp(12px, 3vw, 28px) clamp(40px, 6vw, 64px);
 }
 
-.skill-summary-num {
-  font-size: clamp(1.6rem, 3vw, 2.2rem);
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-  color: var(--text-soft);
-}
-.skill-summary-num strong {
-  font-size: 1.35em;
-  font-weight: 600;
-  color: var(--accent-deep);
-}
-
-.skill-bar {
-  height: 6px;
-  border-radius: 999px;
-  background: var(--line);
-  overflow: hidden;
-}
-.skill-bar-fill {
-  height: 100%;
-  border-radius: 999px;
-  background: var(--accent);
-  transition: width 0.8s var(--ease);
-}
-
-.skill-summary-label {
-  font-size: 0.8rem;
-  color: var(--text-soft);
-  letter-spacing: 0.02em;
-}
-
-.skill-groups {
-  display: grid;
-  gap: clamp(26px, 4vw, 40px);
-  padding-bottom: clamp(40px, 7vw, 72px);
-}
-
-.skill-group-head {
+.skillmap-bar {
   display: flex;
-  align-items: baseline;
-  gap: 12px;
   flex-wrap: wrap;
-  padding-bottom: 0.7rem;
-  margin-bottom: 0.9rem;
-  border-bottom: 1px solid var(--line);
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
 }
-.skill-group-head h2 {
-  font-size: clamp(1rem, 2vw, 1.15rem);
+
+.skillmap-zoom { display: flex; gap: 6px; }
+
+.skillmap-zoom button {
+  font: inherit;
+  font-size: 0.84rem;
+  min-width: 40px;
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--text-mid);
+  cursor: pointer;
+  transition: border-color 0.2s var(--ease), color 0.2s var(--ease);
 }
-.skill-group-count {
-  font-size: 0.8rem;
-  color: var(--text-soft);
-  font-variant-numeric: tabular-nums;
+.skillmap-zoom button:hover { border-color: var(--accent); color: var(--accent-deep); }
+
+/* 지도 자체는 어두운 판 위에 그립니다. 선과 색이 훨씬 잘 읽힙니다. */
+.skillmap-canvas {
+  position: relative;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background:
+    radial-gradient(circle at 50% 45%, #221c16 0%, #14100d 60%, #0d0a08 100%);
+  box-shadow: var(--shadow-md);
+  height: min(78vh, 820px);
 }
-.skill-group-link {
-  margin-left: auto;
+
+.skillmap-canvas svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  touch-action: none;      /* 손가락 이동을 우리가 처리합니다 */
+  cursor: grab;
+}
+.skillmap-canvas svg:active { cursor: grabbing; }
+
+.sm-edges line { pointer-events: none; }
+
+.skillmap-tip {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  display: grid;
+  gap: 2px;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  background: rgba(13, 10, 8, 0.86);
+  border: 1px solid rgba(232, 217, 196, 0.18);
+  color: #e8d9c4;
+  font-size: 0.84rem;
+  pointer-events: none;
+  max-width: min(80%, 420px);
+}
+.skillmap-tip span { font-size: 0.76rem; opacity: 0.65; }
+.skillmap-tip .tip-link { opacity: 0.45; }
+
+.skillmap-help {
+  margin-top: 12px;
   font-size: 0.76rem;
   color: var(--text-soft);
+  text-align: center;
 }
-.skill-group-link:hover { color: var(--accent); }
 
-.skill-group-desc {
-  margin: -0.4rem 0 0.9rem;
-  font-size: 0.84rem;
+/* 첫 화면 아래쪽의 조용한 링크 */
+.quiet-link {
+  font-size: 0.72rem;
   color: var(--text-soft);
+  letter-spacing: 0.04em;
 }
-
-.skill-items {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
-}
-
-/* 아직 없는 것 — 테두리만 */
-.skill-item {
-  display: inline-flex;
-  align-items: baseline;
-  gap: 0.45em;
-  padding: 5px 12px;
-  border-radius: 999px;
-  border: 1px solid var(--line);
-  background: transparent;
-  color: var(--text-soft);
-  font-size: 0.82rem;
-  line-height: 1.5;
-  transition: transform 0.2s var(--ease), border-color 0.2s var(--ease),
-              background 0.2s var(--ease), color 0.2s var(--ease);
-}
-.skill-item:hover {
-  transform: translateY(-2px);
-  border-color: var(--accent);
-  color: var(--text-mid);
-}
-
-/* 가지고 있는 것 — 채워진 배경 */
-.skill-item.is-have {
-  background: var(--accent-wash);
-  border-color: transparent;
-  color: var(--accent-deep);
-  font-weight: 500;
-}
-.skill-item.is-have:hover {
-  background: color-mix(in srgb, var(--accent) 26%, var(--accent-wash));
-  color: var(--accent-deep);
-}
-
-.skill-mark {
-  font-size: 0.6em;
-  opacity: 0.75;
-}
-
-.skill-note {
-  font-size: 0.85em;
-  opacity: 0.75;
-  font-weight: 400;
-  border-left: 1px solid currentColor;
-  padding-left: 0.5em;
-  margin-left: 0.1em;
-}
-
-.skill-foot {
-  font-size: 0.78rem;
-  line-height: 1.9;
-  color: var(--text-soft);
-  border-top: 1px solid var(--line);
-  padding: clamp(20px, 3vw, 28px) 0 clamp(40px, 6vw, 64px);
-}
-.skill-foot code {
-  background: var(--surface-2);
-  border: 1px solid var(--line);
-  border-radius: 5px;
-  padding: 1px 6px;
-  font-size: 0.95em;
-}
+.quiet-link:hover { color: var(--accent); }
 
 @media (max-width: 620px) {
-  .skill-note { display: none; }
+  .skillmap-canvas { height: min(70vh, 560px); }
+  .skillmap-bar { flex-direction: column; align-items: stretch; }
+  .skillmap-zoom { justify-content: flex-end; }
 }

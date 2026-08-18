@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { PROFILE } from "../data/profile";
 
 export function Footer() {
@@ -38,6 +39,10 @@ export function Footer() {
             <div className="copy">
               &copy; {new Date().getFullYear()} {p.nameEn}
             </div>
+            {/* 개인 참고용 지도. 눈에 띄지 않게 두되 접근은 됩니다 */}
+            <Link className="quiet-link" to="/skills">
+              기술 지도
+            </Link>
           </div>
         </div>
       </div>
