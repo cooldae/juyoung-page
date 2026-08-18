@@ -1099,3 +1099,152 @@ a:hover { color: var(--accent); }
   .project-card, .card { break-inside: avoid; box-shadow: none; }
   .reveal { opacity: 1; transform: none; }
 }
+
+/* ============================================================
+   기술 지도 (/skills) — 개인 확인용
+   ============================================================ */
+
+.skill-summary {
+  display: grid;
+  gap: 10px;
+  margin-bottom: clamp(24px, 4vw, 36px);
+}
+
+.skill-summary-num {
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-soft);
+}
+.skill-summary-num strong {
+  font-size: 1.35em;
+  font-weight: 600;
+  color: var(--accent-deep);
+}
+
+.skill-bar {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--line);
+  overflow: hidden;
+}
+.skill-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--accent);
+  transition: width 0.8s var(--ease);
+}
+
+.skill-summary-label {
+  font-size: 0.8rem;
+  color: var(--text-soft);
+  letter-spacing: 0.02em;
+}
+
+.skill-groups {
+  display: grid;
+  gap: clamp(26px, 4vw, 40px);
+  padding-bottom: clamp(40px, 7vw, 72px);
+}
+
+.skill-group-head {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-bottom: 0.7rem;
+  margin-bottom: 0.9rem;
+  border-bottom: 1px solid var(--line);
+}
+.skill-group-head h2 {
+  font-size: clamp(1rem, 2vw, 1.15rem);
+}
+.skill-group-count {
+  font-size: 0.8rem;
+  color: var(--text-soft);
+  font-variant-numeric: tabular-nums;
+}
+.skill-group-link {
+  margin-left: auto;
+  font-size: 0.76rem;
+  color: var(--text-soft);
+}
+.skill-group-link:hover { color: var(--accent); }
+
+.skill-group-desc {
+  margin: -0.4rem 0 0.9rem;
+  font-size: 0.84rem;
+  color: var(--text-soft);
+}
+
+.skill-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+/* 아직 없는 것 — 테두리만 */
+.skill-item {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.45em;
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--text-soft);
+  font-size: 0.82rem;
+  line-height: 1.5;
+  transition: transform 0.2s var(--ease), border-color 0.2s var(--ease),
+              background 0.2s var(--ease), color 0.2s var(--ease);
+}
+.skill-item:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  color: var(--text-mid);
+}
+
+/* 가지고 있는 것 — 채워진 배경 */
+.skill-item.is-have {
+  background: var(--accent-wash);
+  border-color: transparent;
+  color: var(--accent-deep);
+  font-weight: 500;
+}
+.skill-item.is-have:hover {
+  background: color-mix(in srgb, var(--accent) 26%, var(--accent-wash));
+  color: var(--accent-deep);
+}
+
+.skill-mark {
+  font-size: 0.6em;
+  opacity: 0.75;
+}
+
+.skill-note {
+  font-size: 0.85em;
+  opacity: 0.75;
+  font-weight: 400;
+  border-left: 1px solid currentColor;
+  padding-left: 0.5em;
+  margin-left: 0.1em;
+}
+
+.skill-foot {
+  font-size: 0.78rem;
+  line-height: 1.9;
+  color: var(--text-soft);
+  border-top: 1px solid var(--line);
+  padding: clamp(20px, 3vw, 28px) 0 clamp(40px, 6vw, 64px);
+}
+.skill-foot code {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 1px 6px;
+  font-size: 0.95em;
+}
+
+@media (max-width: 620px) {
+  .skill-note { display: none; }
+}
