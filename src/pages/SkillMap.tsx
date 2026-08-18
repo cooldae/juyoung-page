@@ -1,12 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { buildGraph, groupColor, type Node } from "../lib/skillLayout";
+import { buildGraph, groupColor, labelTransform, type Node } from "../lib/skillLayout";
 import { useDocumentTitle } from "../hooks/useReveal";
 
 type View = { x: number; y: number; w: number; h: number };
 
-const MIN_W = 400; // 가장 많이 확대했을 때 보이는 폭
-const MAX_W = 6000; // 가장 많이 축소했을 때
+const MIN_W = 500;
+const MAX_W = 8000;
 
 export default function SkillMap() {
   const { nodes, edges, bounds, groupCount } = useMemo(() => buildGraph(), []);
@@ -16,9 +16,10 @@ export default function SkillMap() {
   const [query, setQuery] = useState("");
   const [hover, setHover] = useState<Node | null>(null);
 
+  const itemNodes = useMemo(() => nodes.filter((n) => n.kind === "item"), [nodes]);
+
   useDocumentTitle("기술 지도 — KIM JUYOUNG");
 
-  // 개인 참고용이라 검색 엔진에 잡히지 않게 합니다
   useEffect(() => {
     const tag = document.createElement("meta");
     tag.name = "robots";
@@ -36,7 +37,6 @@ export default function SkillMap() {
     return new Set(nodes.filter((n) => n.label.toLowerCase().includes(q)).map((n) => n.id));
   }, [q, nodes]);
 
-  /* ---------- 화면 좌표 → 지도 좌표 ---------- */
   function toMap(clientX: number, clientY: number) {
     const svg = svgRef.current;
     if (!svg) return { x: 0, y: 0 };
@@ -52,12 +52,10 @@ export default function SkillMap() {
     setView((v) => {
       const nw = Math.min(MAX_W, Math.max(MIN_W, v.w * factor));
       const k = nw / v.w;
-      const nh = v.h * k;
-      return { x: p.x - (p.x - v.x) * k, y: p.y - (p.y - v.y) * k, w: nw, h: nh };
+      return { x: p.x - (p.x - v.x) * k, y: p.y - (p.y - v.y) * k, w: nw, h: v.h * k };
     });
   }
 
-  /* ---------- 끌기 · 손가락 ---------- */
   const pointers = useRef(new Map<number, { x: number; y: number }>());
   const pinch = useRef<number | null>(null);
   const dragged = useRef(false);
@@ -72,22 +70,18 @@ export default function SkillMap() {
     const prev = pointers.current.get(e.pointerId);
     if (!prev) return;
     pointers.current.set(e.pointerId, { x: e.clientX, y: e.clientY });
-
     const pts = [...pointers.current.values()];
 
-    // 손가락 두 개 → 확대·축소
     if (pts.length === 2) {
       const dist = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
       if (pinch.current != null && dist > 0) {
-        const factor = pinch.current / dist;
-        zoomAt(factor, (pts[0].x + pts[1].x) / 2, (pts[0].y + pts[1].y) / 2);
+        zoomAt(pinch.current / dist, (pts[0].x + pts[1].x) / 2, (pts[0].y + pts[1].y) / 2);
       }
       pinch.current = dist;
       dragged.current = true;
       return;
     }
 
-    // 하나 → 이동
     const svg = svgRef.current;
     if (!svg) return;
     const r = svg.getBoundingClientRect();
@@ -102,13 +96,12 @@ export default function SkillMap() {
     if (pointers.current.size < 2) pinch.current = null;
   }
 
-  // 휠 확대·축소. passive 가 아니어야 페이지 스크롤을 막을 수 있어 직접 붙입니다.
   useEffect(() => {
     const svg = svgRef.current;
     if (!svg) return;
     const onWheel = (e: WheelEvent) => {
       e.preventDefault();
-      zoomAt(e.deltaY > 0 ? 1.15 : 1 / 1.15, e.clientX, e.clientY);
+      zoomAt(e.deltaY > 0 ? 1.18 : 1 / 1.18, e.clientX, e.clientY);
     };
     svg.addEventListener("wheel", onWheel, { passive: false });
     return () => svg.removeEventListener("wheel", onWheel);
@@ -121,16 +114,13 @@ export default function SkillMap() {
     zoomAt(factor, r.left + r.width / 2, r.top + r.height / 2);
   }
 
-  const scale = bounds.w / view.w; // 1 이면 전체가 보이는 상태
-  const showItemLabels = scale > 1.7;
+  const scale = bounds.w / view.w;
+  const showItemLabels = scale > 1.35 || !!matched;
 
-  function nodeOpacity(n: Node) {
-    if (!matched) return 1;
-    return matched.has(n.id) ? 1 : 0.12;
-  }
+  const dim = (n: Node) => (matched && !matched.has(n.id) ? 0.1 : 1);
 
   return (
-    <main id="main" className="skillmap-page">
+    <main id="main">
       <div className="wrap">
         <header className="detail-hero">
           <Link className="back-link" to="/">
@@ -138,7 +128,9 @@ export default function SkillMap() {
           </Link>
           <h1>기술 지도</h1>
           <div className="detail-meta">
-            <span>개발 영역에서 쓰이는 용어 {nodes.length - 1 - groupCount}개를 {groupCount}개 분야로 묶었습니다</span>
+            <span>
+              개발 영역에서 쓰이는 용어 {itemNodes.length}개를 {groupCount}개 분야로 묶었습니다
+            </span>
           </div>
         </header>
       </div>
@@ -185,32 +177,29 @@ export default function SkillMap() {
             role="img"
             aria-label="개발 기술 지도"
           >
-            {/* 연결선 */}
-            <g className="sm-edges">
+            {/* 가지 */}
+            <g fill="none">
               {edges.map((e, i) => (
-                <line
+                <path
                   key={i}
-                  x1={e.a.x}
-                  y1={e.a.y}
-                  x2={e.b.x}
-                  y2={e.b.y}
-                  stroke={groupColor(e.b.group, groupCount)}
-                  strokeWidth={e.b.kind === "group" ? 3.5 : 1.6}
-                  opacity={matched ? 0.08 : e.b.kind === "group" ? 0.42 : 0.24}
+                  d={e.path}
+                  stroke={groupColor(e.group, groupCount)}
+                  strokeWidth={e.toKind === "group" ? 4 : 1.5}
+                  opacity={matched ? 0.07 : e.toKind === "group" ? 0.5 : 0.3}
                 />
               ))}
             </g>
 
-            {/* 노드 */}
+            {/* 항목 */}
             <g>
-              {nodes.map((n) => {
+              {itemNodes.map((n) => {
                 const color = groupColor(n.group, groupCount);
-                const r = n.kind === "root" ? 46 : n.kind === "group" ? 26 : 11;
-                const isHover = hover?.id === n.id;
+                const on = hover?.id === n.id;
+                const { transform, anchor } = labelTransform(n, 16);
                 return (
                   <g
                     key={n.id}
-                    opacity={nodeOpacity(n)}
+                    opacity={dim(n)}
                     onMouseEnter={() => setHover(n)}
                     onMouseLeave={() => setHover(null)}
                     onClick={() => {
@@ -226,22 +215,19 @@ export default function SkillMap() {
                     <circle
                       cx={n.x}
                       cy={n.y}
-                      r={r + (isHover ? 5 : 0)}
-                      fill="#14100d"
+                      r={on ? 12 : 7}
+                      fill={on ? color : "#15110d"}
                       stroke={color}
-                      strokeWidth={n.kind === "item" ? 2.4 : 4}
+                      strokeWidth={2.4}
                     />
-                    <circle cx={n.x} cy={n.y} r={r * 0.52} fill={color} opacity={isHover ? 0.95 : 0.7} />
-
-                    {(n.kind !== "item" || showItemLabels || isHover) && (
+                    {(showItemLabels || on) && (
                       <text
-                        x={n.x}
-                        y={n.y + r + (n.kind === "item" ? 20 : 34)}
-                        textAnchor="middle"
-                        fill={n.kind === "item" ? "#d9cbb6" : color}
-                        fontSize={n.kind === "root" ? 44 : n.kind === "group" ? 30 : 16}
-                        fontWeight={n.kind === "item" ? 400 : 600}
-                        style={{ paintOrder: "stroke", stroke: "#0d0a08", strokeWidth: 5 }}
+                        transform={transform}
+                        textAnchor={anchor}
+                        dominantBaseline="middle"
+                        fill={on ? color : "#d8cab5"}
+                        fontSize={16}
+                        style={{ paintOrder: "stroke", stroke: "#0d0a08", strokeWidth: 4 }}
                       >
                         {n.label}
                       </text>
@@ -250,14 +236,75 @@ export default function SkillMap() {
                 );
               })}
             </g>
+
+            {/* 분야 · 뿌리 */}
+            <g>
+              {nodes
+                .filter((n) => n.kind !== "item")
+                .map((n) => {
+                  const color = groupColor(n.group, groupCount);
+                  const isRoot = n.kind === "root";
+                  const on = hover?.id === n.id;
+                  const { transform, anchor } = labelTransform(n, 26);
+                  return (
+                    <g
+                      key={n.id}
+                      opacity={dim(n)}
+                      onMouseEnter={() => setHover(n)}
+                      onMouseLeave={() => setHover(null)}
+                      onClick={() => {
+                        if (dragged.current) return;
+                        const url = n.link ?? `https://www.google.com/search?q=${encodeURIComponent(n.label)}`;
+                        window.open(url, "_blank", "noopener,noreferrer");
+                      }}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <circle
+                        cx={n.x}
+                        cy={n.y}
+                        r={isRoot ? 44 : on ? 24 : 18}
+                        fill="#15110d"
+                        stroke={color}
+                        strokeWidth={isRoot ? 5 : 4}
+                      />
+                      <circle cx={n.x} cy={n.y} r={isRoot ? 20 : 8} fill={color} />
+
+                      {isRoot ? (
+                        <text
+                          x={0}
+                          y={78}
+                          textAnchor="middle"
+                          fill={color}
+                          fontSize={42}
+                          fontWeight={600}
+                          style={{ paintOrder: "stroke", stroke: "#0d0a08", strokeWidth: 6 }}
+                        >
+                          {n.label}
+                        </text>
+                      ) : (
+                        <text
+                          transform={transform}
+                          textAnchor={anchor}
+                          dominantBaseline="middle"
+                          fill={color}
+                          fontSize={30}
+                          fontWeight={600}
+                          style={{ paintOrder: "stroke", stroke: "#0d0a08", strokeWidth: 7 }}
+                        >
+                          {n.label}
+                        </text>
+                      )}
+                    </g>
+                  );
+                })}
+            </g>
           </svg>
 
           {hover && (
             <div className="skillmap-tip">
               <strong>{hover.label}</strong>
               {hover.desc && <span>{hover.desc}</span>}
-              {hover.link && <span className="tip-link">로드맵 있음 · 누르면 검색</span>}
-              {!hover.link && <span className="tip-link">누르면 검색</span>}
+              <span className="tip-link">{hover.link ? "누르면 로드맵" : "누르면 검색"}</span>
             </div>
           )}
         </div>
