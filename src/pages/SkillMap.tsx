@@ -1,22 +1,23 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { buildGraph, groupColor, labelTransform, type Node } from "../lib/skillLayout";
+import { FONT, allLabels, buildGraph, groupColor, type Box } from "../lib/skillLayout";
 import { useDocumentTitle } from "../hooks/useReveal";
 
 type View = { x: number; y: number; w: number; h: number };
+type Layout = ReturnType<typeof buildGraph>;
 
-const MIN_W = 500;
-const MAX_W = 8000;
+const MIN_W = 420;
+const MAX_W = 9000;
 
 export default function SkillMap() {
-  const { nodes, edges, bounds, groupCount } = useMemo(() => buildGraph(), []);
   const svgRef = useRef<SVGSVGElement | null>(null);
+  const measureRef = useRef<SVGSVGElement | null>(null);
 
-  const [view, setView] = useState<View>(bounds);
+  const labels = useMemo(() => allLabels(), []);
+  const [layout, setLayout] = useState<Layout | null>(null);
+  const [view, setView] = useState<View | null>(null);
   const [query, setQuery] = useState("");
-  const [hover, setHover] = useState<Node | null>(null);
-
-  const itemNodes = useMemo(() => nodes.filter((n) => n.kind === "item"), [nodes]);
+  const [hover, setHover] = useState<Box | null>(null);
 
   useDocumentTitle("기술 지도 — KIM JUYOUNG");
 
@@ -31,28 +32,59 @@ export default function SkillMap() {
     };
   }, []);
 
+  /* 글자 폭을 어림하지 않고 실제로 한 번 그려서 잽니다.
+     짧은 영문 이름은 어림값이 두 배 가까이 틀려 상자 밖으로 삐져나옵니다. */
+  useLayoutEffect(() => {
+    let alive = true;
+    const measure = () => {
+      const svg = measureRef.current;
+      if (!svg || !alive) return;
+      const widths = new Map<string, number>();
+      svg.querySelectorAll<SVGTextElement>("text").forEach((t) => {
+        const key = t.getAttribute("data-key");
+        if (key) widths.set(key, t.getBBox().width);
+      });
+      const built = buildGraph(widths);
+      if (!alive) return;
+      setLayout(built);
+      setView(built.bounds);
+    };
+    // 웹폰트가 올라온 뒤에 재야 실제 폭이 나옵니다
+    if (document.fonts?.ready) document.fonts.ready.then(measure);
+    else measure();
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  const boxes = layout?.boxes ?? [];
+  const edges = layout?.edges ?? [];
+  const bounds = layout?.bounds ?? { x: 0, y: 0, w: 1000, h: 1000 };
+  const v = view ?? bounds;
+
   const q = query.trim().toLowerCase();
   const matched = useMemo(() => {
     if (!q) return null;
-    return new Set(nodes.filter((n) => n.label.toLowerCase().includes(q)).map((n) => n.id));
-  }, [q, nodes]);
+    return new Set(boxes.filter((b) => b.label.toLowerCase().includes(q)).map((b) => b.id));
+  }, [q, boxes]);
 
   function toMap(clientX: number, clientY: number) {
     const svg = svgRef.current;
     if (!svg) return { x: 0, y: 0 };
     const r = svg.getBoundingClientRect();
     return {
-      x: view.x + ((clientX - r.left) / r.width) * view.w,
-      y: view.y + ((clientY - r.top) / r.height) * view.h,
+      x: v.x + ((clientX - r.left) / r.width) * v.w,
+      y: v.y + ((clientY - r.top) / r.height) * v.h,
     };
   }
 
   function zoomAt(factor: number, clientX: number, clientY: number) {
     const p = toMap(clientX, clientY);
-    setView((v) => {
-      const nw = Math.min(MAX_W, Math.max(MIN_W, v.w * factor));
-      const k = nw / v.w;
-      return { x: p.x - (p.x - v.x) * k, y: p.y - (p.y - v.y) * k, w: nw, h: v.h * k };
+    setView((prev) => {
+      const cur = prev ?? bounds;
+      const nw = Math.min(MAX_W, Math.max(MIN_W, cur.w * factor));
+      const k = nw / cur.w;
+      return { x: p.x - (p.x - cur.x) * k, y: p.y - (p.y - cur.y) * k, w: nw, h: cur.h * k };
     });
   }
 
@@ -85,10 +117,13 @@ export default function SkillMap() {
     const svg = svgRef.current;
     if (!svg) return;
     const r = svg.getBoundingClientRect();
-    const dx = ((e.clientX - prev.x) / r.width) * view.w;
-    const dy = ((e.clientY - prev.y) / r.height) * view.h;
+    const dx = ((e.clientX - prev.x) / r.width) * v.w;
+    const dy = ((e.clientY - prev.y) / r.height) * v.h;
     if (Math.abs(dx) + Math.abs(dy) > 0.5) dragged.current = true;
-    setView((v) => ({ ...v, x: v.x - dx, y: v.y - dy }));
+    setView((cur) => {
+      const c = cur ?? bounds;
+      return { ...c, x: c.x - dx, y: c.y - dy };
+    });
   }
 
   function onPointerUp(e: React.PointerEvent<SVGSVGElement>) {
@@ -114,28 +149,40 @@ export default function SkillMap() {
     zoomAt(factor, r.left + r.width / 2, r.top + r.height / 2);
   }
 
-  const scale = bounds.w / view.w;
-  const showItemLabels = scale > 1.35 || !!matched;
+  function open(b: Box) {
+    if (dragged.current) return;
+    const url = b.link ?? `https://www.google.com/search?q=${encodeURIComponent(b.label)}`;
+    window.open(url, "_blank", "noopener,noreferrer");
+  }
 
-  const dim = (n: Node) => (matched && !matched.has(n.id) ? 0.1 : 1);
+  const dim = (b: Box) => (matched && !matched.has(b.id) ? 0.09 : 1);
 
   return (
     <main id="main">
-      <div className="wrap">
-        <header className="detail-hero">
+      {/* 폭을 재기 위한 보이지 않는 글자들 */}
+      <svg ref={measureRef} className="skillmap-measure" aria-hidden="true">
+        {labels.map((l) => (
+          <text key={l.key} data-key={l.key} fontSize={FONT[l.kind]} fontWeight={l.kind === "item" ? 400 : 600}>
+            {l.label}
+          </text>
+        ))}
+      </svg>
+
+      <div className="skillmap-top">
+        <div className="wrap">
           <Link className="back-link" to="/">
             ← 포트폴리오로
           </Link>
-          <h1>기술 지도</h1>
-          <div className="detail-meta">
+          <div className="skillmap-head">
+            <h1>기술 지도</h1>
             <span>
-              개발 영역에서 쓰이는 용어 {itemNodes.length}개를 {groupCount}개 분야로 묶었습니다
+              개발 영역의 용어 {layout?.itemCount ?? 0}개 · {layout?.groupCount ?? 0}개 분야
             </span>
           </div>
-        </header>
+        </div>
       </div>
 
-      <div className="skillmap-shell">
+      <div className="skillmap-full">
         <div className="skillmap-bar">
           <div className="search">
             <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -151,7 +198,6 @@ export default function SkillMap() {
               onChange={(e) => setQuery(e.target.value)}
             />
           </div>
-
           <div className="skillmap-zoom">
             <button type="button" onClick={() => zoomCenter(1 / 1.4)} aria-label="확대">
               +
@@ -166,9 +212,11 @@ export default function SkillMap() {
         </div>
 
         <div className="skillmap-canvas">
+          {!layout && <div className="skillmap-loading">자리를 잡는 중…</div>}
+
           <svg
             ref={svgRef}
-            viewBox={`${view.x} ${view.y} ${view.w} ${view.h}`}
+            viewBox={`${v.x} ${v.y} ${v.w} ${v.h}`}
             onPointerDown={onPointerDown}
             onPointerMove={onPointerMove}
             onPointerUp={onPointerUp}
@@ -177,126 +225,62 @@ export default function SkillMap() {
             role="img"
             aria-label="개발 기술 지도"
           >
-            {/* 가지 */}
-            <g fill="none">
+            <g>
               {edges.map((e, i) => (
-                <path
+                <line
                   key={i}
-                  d={e.path}
-                  stroke={groupColor(e.group, groupCount)}
-                  strokeWidth={e.toKind === "group" ? 4 : 1.5}
-                  opacity={matched ? 0.07 : e.toKind === "group" ? 0.5 : 0.3}
+                  x1={e.ax}
+                  y1={e.ay}
+                  x2={e.bx}
+                  y2={e.by}
+                  stroke={groupColor(e.group, layout?.groupCount ?? 1)}
+                  strokeWidth={e.strong ? 3.5 : 1.3}
+                  opacity={matched ? 0.05 : e.strong ? 0.4 : 0.2}
                 />
               ))}
             </g>
 
-            {/* 항목 */}
             <g>
-              {itemNodes.map((n) => {
-                const color = groupColor(n.group, groupCount);
-                const on = hover?.id === n.id;
-                const { transform, anchor } = labelTransform(n, 16);
+              {boxes.map((b) => {
+                const color = groupColor(b.group, layout?.groupCount ?? 1);
+                const on = hover?.id === b.id;
+                const isItem = b.kind === "item";
+                const fs = FONT[b.kind];
+                const dotR = isItem ? 4 : 6;
+                const dotX = b.x - b.w / 2 + (isItem ? 15 : 19);
                 return (
                   <g
-                    key={n.id}
-                    opacity={dim(n)}
-                    onMouseEnter={() => setHover(n)}
+                    key={b.id}
+                    opacity={dim(b)}
+                    onMouseEnter={() => setHover(b)}
                     onMouseLeave={() => setHover(null)}
-                    onClick={() => {
-                      if (dragged.current) return;
-                      window.open(
-                        `https://www.google.com/search?q=${encodeURIComponent(n.label)}`,
-                        "_blank",
-                        "noopener,noreferrer"
-                      );
-                    }}
+                    onClick={() => open(b)}
                     style={{ cursor: "pointer" }}
                   >
-                    <circle
-                      cx={n.x}
-                      cy={n.y}
-                      r={on ? 12 : 7}
-                      fill={on ? color : "#15110d"}
+                    <rect
+                      x={b.x - b.w / 2}
+                      y={b.y - b.h / 2}
+                      width={b.w}
+                      height={b.h}
+                      rx={b.h / 2}
+                      fill={on ? color : isItem ? "#171310" : "#1e1913"}
                       stroke={color}
-                      strokeWidth={2.4}
+                      strokeWidth={isItem ? 1.6 : 2.6}
                     />
-                    {(showItemLabels || on) && (
-                      <text
-                        transform={transform}
-                        textAnchor={anchor}
-                        dominantBaseline="middle"
-                        fill={on ? color : "#d8cab5"}
-                        fontSize={16}
-                        style={{ paintOrder: "stroke", stroke: "#0d0a08", strokeWidth: 4 }}
-                      >
-                        {n.label}
-                      </text>
-                    )}
+                    <circle cx={dotX} cy={b.y} r={dotR} fill={on ? "#171310" : color} />
+                    <text
+                      x={dotX + dotR + (isItem ? 8 : 11)}
+                      y={b.y}
+                      dominantBaseline="central"
+                      fill={on ? "#171310" : isItem ? "#e2d5c1" : color}
+                      fontSize={fs}
+                      fontWeight={isItem ? 400 : 600}
+                    >
+                      {b.label}
+                    </text>
                   </g>
                 );
               })}
-            </g>
-
-            {/* 분야 · 뿌리 */}
-            <g>
-              {nodes
-                .filter((n) => n.kind !== "item")
-                .map((n) => {
-                  const color = groupColor(n.group, groupCount);
-                  const isRoot = n.kind === "root";
-                  const on = hover?.id === n.id;
-                  const { transform, anchor } = labelTransform(n, 26);
-                  return (
-                    <g
-                      key={n.id}
-                      opacity={dim(n)}
-                      onMouseEnter={() => setHover(n)}
-                      onMouseLeave={() => setHover(null)}
-                      onClick={() => {
-                        if (dragged.current) return;
-                        const url = n.link ?? `https://www.google.com/search?q=${encodeURIComponent(n.label)}`;
-                        window.open(url, "_blank", "noopener,noreferrer");
-                      }}
-                      style={{ cursor: "pointer" }}
-                    >
-                      <circle
-                        cx={n.x}
-                        cy={n.y}
-                        r={isRoot ? 44 : on ? 24 : 18}
-                        fill="#15110d"
-                        stroke={color}
-                        strokeWidth={isRoot ? 5 : 4}
-                      />
-                      <circle cx={n.x} cy={n.y} r={isRoot ? 20 : 8} fill={color} />
-
-                      {isRoot ? (
-                        <text
-                          x={0}
-                          y={78}
-                          textAnchor="middle"
-                          fill={color}
-                          fontSize={42}
-                          fontWeight={600}
-                          style={{ paintOrder: "stroke", stroke: "#0d0a08", strokeWidth: 6 }}
-                        >
-                          {n.label}
-                        </text>
-                      ) : (
-                        <text
-                          transform={transform}
-                          textAnchor={anchor}
-                          dominantBaseline="middle"
-                          fill={color}
-                          fontSize={30}
-                          fontWeight={600}
-                          style={{ paintOrder: "stroke", stroke: "#0d0a08", strokeWidth: 7 }}
-                        >
-                          {n.label}
-                        </text>
-                      )}
-                    </g>
-                  );
-                })}
             </g>
           </svg>
 
@@ -309,9 +293,7 @@ export default function SkillMap() {
           )}
         </div>
 
-        <p className="skillmap-help">
-          끌어서 이동 · 휠로 확대·축소 · 노드를 누르면 검색 · 확대하면 용어 이름이 나타납니다
-        </p>
+        <p className="skillmap-help">끌어서 이동 · 휠이나 손가락으로 확대·축소 · 상자를 누르면 검색</p>
       </div>
     </main>
   );
